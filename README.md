@@ -28,21 +28,22 @@
 <!-- PROJECT LOGO -->
 <br />
 
-  <a href="https://github.com/mestrinio/Avaliacao2-PSR/graphs/">
+  <a href="https://github.com/mestrinio/SAVI_Trabalho2">
     <img src="images/logo.png" alt="Logo" width="550" height="350">
   </a>
 
-<h3 align="center">PSR - Trabalho Prático 2</h3>
+<h3 align="center">SAVI - Trabalho Prático 2</h3>
+<h3 align="center">MuG-21 Fishbed</h3>
 
 <h2><b> Repository Owner: Pedro Martins 103800
-<br>Collaborators: Gustavo Reggio 118485 & Tomás Taxa 121863 </b></h2>
+<br>Collaborators: Emanuel Ramos 103838 & José Silva 103268 </b></h2>
 
   <p align="center">
-    This repository was created for evaluation @ Robotic Systems Programming "PSR 23-24 Trabalho prático 2".
+    This repository was created for evaluation @ Advanced Systems of Industrial Vision "SAVI 23-24 Trabalho prático 2".
     <br />
-    <!-- <a href="https://github.com/mestrinio/Avaliacao2-PSR"><strong>Explore the Wiki »</strong></a> -->
+    <!-- <a href="https://github.com/mestrinio/SAVI_Trabalho2"><strong>Explore the Wiki »</strong></a> -->
     <br >
-    <a href="https://github.com/mestrinio/Avaliacao2-PSR/issues"> <u>Make Suggestion</u> </a>
+    <a href="https://github.com/mestrinio/SAVI_Trabalho2/issues"> <u>Make Suggestion</u> </a>
   </p>
 </div>
 <br>
@@ -80,8 +81,7 @@
 <img  src="images/drawing1.png" alt="colorsegmenter" height="400">
 </div>
 <br>
-This assignment was developed for Robotic Systems Programming. It is an Augmented Reality Painting program, which uses the computer webcam to detect a specific chosen color, and with that, draw on the exact position in a white canvas. This uses Python's OpenCV and includes some advanced features requested by the teacher.
-
+This assignment was developed for Advanced Systems of Industrial Vision. The program is defined as an advanced perception system that processes data incoming from 3D sensors and RGB normal cameras. The objective is to detect objects presented in a scene, as well as estimate it's properties
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -103,39 +103,48 @@ This assignment was developed for Robotic Systems Programming. It is an Augmente
 
 <!-- Objectives -->
 ## Objectives
-### Color Segmenter
-The color segmenter program asks the user what parameters for color detection he wants. This part captures the webcam and shows 6 trackbars on the image so that the user can define the right color detection for whatever object he wants to use for painting. Then saves these values on a JSON file.
+### Training of a classifier in deep learning
+The program is capable of detecting objects in a chosen scene, and then calculate various properties of the objects.
+The object dataset is fully utilized to develop a deep learning network that is capable of classifying the objects. It is divided in training 80% and testing 20%. After being trained, it is able to calculate precision (global and per class).
+
+
+### 3D Pre-processing
+The systems processes the pointcloud of a scene and isolates the objects. Then calculates the following properties:
+- Color
+- Height
+- Width
+- Other relevant properties...
+
+
+### Classification of the objects in the scene
+The segmentation of objects in the pointclouds is used to discover the zone where the object is in the RGB image. From here a sub-image that contains only the object is obtained and given to the previous network for new training.
+
+
+### Audio description of the scene
+A speech synthesizer is used to verbally describe what objects with what properties are found in the scene.
+
+
+### Perfomance metrics
+All the algorithms made are classified by using perfomance metrics. For the object detectors, the following perfomance metrics are defined:
+- Precision
+- Recall
+- F1 Score
+
+
+### Realtime test
+The program can be ran using a RGB-D camera on the real world, and trying the detection of objects on top of a table.
 
 
 
 
-### AR Paint
+### MuG-21 Fishbed
 
 The actual painting part of the program should accomplish the following requirements:
 
 #### SETUP
-- Read the arguments on the command line to path the json file;
-- Read the json file specified in the path, that has the color limits;
-- Setup the webcam's capture;
-- Create a white canvas to draw on, which has the same size as the incoming capture video of the webcam;
+
 
 #### CONTINUOUS
-- Record and show each webcam's frame;
-- Process the incoming video feed with a mask containing the desired pixel color values (and show the mask on another window);
-- Process the mask to obtain only the biggest object, and show it;
-- Calculate that object's centroid (and mark it as a red cross 'X' on the webcam's feed);
-- Use that centroid to paint a circle or a line in the white canvas, with the chosen characteristics for the painting;
-***
-
-#### Advanced features
-##### Feature 1 - Use Shake Protection
-The program is designed to draw lines between centroids instead of circles in each centroid. But sometimes errors in the color detection can happen, and detections on random points of the camera happen, resulting in enormous lines across the canvas. Shake protection detects if the distance between lines is too big to be right, and prevents the drawing. The program should also function using the mouse clicks to draw when either the detections are failing, or the user chooses to do it.
-
-##### Feature 2 - Use webcam feed as canvas
-The program should allow the switch in the canvas choice, between the white canvas and the actual webcam frames.
-
-##### Feature 3 - Draw shapes
-The program should allow the drawing of shapes on the canvas, rectangles, circles and ellipses. To do so, the user shall press & hold the corresponding key of the shape, to start drawing it, and release it when finishing the size of the shape.
 
 
 <!-- GETTING STARTED -->
@@ -238,16 +247,16 @@ Run ar_paint.py:
 
 <!-- CONTACT -->
 ## Contact
-Gustavo Reggio - gustavo.reggio@ua.pt
+Emanuel Ramos - eramos@ua.pt
+
+
+José Silva - josesilva8@ua.pt
 
 
 Pedro Martins - pedro.mestre@ua.pt
 
 
-Tomás Taxa - tomas.taxa@ua.pt
-
-
-Project Link: [Trabalho Prático 2](https://github.com/mestrinio/Avaliacao2-PSR)
+Project Link: [Trabalho Prático 2](https://github.com/mestrinio/SAVI_Trabalho2)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -265,5 +274,5 @@ Project Link: [Trabalho Prático 2](https://github.com/mestrinio/Avaliacao2-PSR)
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
 [contributors-shield]: https://img.shields.io/github/contributors/RobutlerAlberto/RobutlerAlberto.svg?style=for-the-badge
-[contributors-url]: https://github.com/mestrinio/Avaliacao2-PSR/graphs/contributors
+[contributors-url]: https://github.com/mestrinio/SAVI_Trabalho2/graphs/contributors
 [product-screenshot]: docs/logo.png
