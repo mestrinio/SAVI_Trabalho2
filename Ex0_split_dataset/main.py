@@ -12,7 +12,7 @@ def main():
     # Prepare Datasets
     # -----------------------------------------------------------------
     data_path = 'C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/dataset/'
-    image_filenames = glob.glob(data_path + '*crop.png')
+    image_filenames = glob.glob(data_path + '*_crop.png')
     # To test the script in good time, select only 1000 of the 25000 images
 
     # Use a rule of 70% train, 20% validation, 10% test
