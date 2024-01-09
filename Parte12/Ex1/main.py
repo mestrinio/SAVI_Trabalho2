@@ -14,7 +14,7 @@ from trainer import Trainer
 
 
 def main():
-
+    chosen_obj= 'apple'
     # -----------------------------------------------------------------
     # Hyperparameters initialization
     # -----------------------------------------------------------------
