@@ -175,50 +175,51 @@ def main():
         pcd_separate_object.paint_uniform_color(color)
         pcd_separate_objects.append(pcd_separate_object)
 
+    print('HEREEEEEEEEEEEEEE', pcd_separate_objects)
     # --------------------------------------
     # ICP for object classification
     # --------------------------------------
-    pcd_cereal_box = o3d.io.read_point_cloud('../data/cereal_box_2_2_40.pcd')
-    pcd_cereal_box_ds = pcd_cereal_box.voxel_down_sample(voxel_size=0.005)
-    pcd_cereal_box_ds.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
-    pcd_cereal_box_ds.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
+#    pcd_cereal_box = o3d.io.read_point_cloud('../data/cereal_box_2_2_40.pcd')
+#    pcd_cereal_box_ds = pcd_cereal_box.voxel_down_sample(voxel_size=0.005)
+#    pcd_cereal_box_ds.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
+#    pcd_cereal_box_ds.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
+#
+#    objects_data = []
+#    for idx, pcd_separate_object in enumerate(pcd_separate_objects):
+#
+#        Tinit = np.eye(4, dtype=float)  # null transformation
+#        reg_p2p = o3d.pipelines.registration.registration_icp(pcd_cereal_box_ds, pcd_separate_object, 0.9, Tinit,
+#                                                              o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+#                                                              o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000))
+#
+#        print('object idx ' + str(idx))
+#        print('reg_p2p = ' + str(reg_p2p))
+#
+#        print("Transformation is:")
+#        print(reg_p2p.transformation)
+#
+#        objects_data.append({'transformation': reg_p2p.transformation, 'rmse': reg_p2p.inlier_rmse})
+#        # draw_registration_result(pcd_separate_object, pcd_cereal_box_ds, np.linalg.inv(reg_p2p.transformation))
+#
+#    # Select which of the objects in the table is a cereal box by getting the minimum rmse
+#    min_rmse = None
+#    min_rmse_idx = None
+#
+#    for idx, object_data in enumerate(objects_data):
+#
+#        if min_rmse is None:  # first object, use as minimum
+#            min_rmse = object_data['rmse']
+#            min_rmse_idx = idx
+#
+#        if object_data['rmse'] < min_rmse:
+#            min_rmse = object_data['rmse']
+#            min_rmse_idx = idx
+#
+#    print('Object idx ' + str(min_rmse_idx) + ' is the cereal box')
+#    draw_registration_result(pcd_separate_objects[min_rmse_idx], pcd_cereal_box_ds,
+#                             np.linalg.inv(objects_data[min_rmse_idx]['transformation']))
 
-    objects_data = []
-    for idx, pcd_separate_object in enumerate(pcd_separate_objects):
-
-        Tinit = np.eye(4, dtype=float)  # null transformation
-        reg_p2p = o3d.pipelines.registration.registration_icp(pcd_cereal_box_ds, pcd_separate_object, 0.9, Tinit,
-                                                              o3d.pipelines.registration.TransformationEstimationPointToPoint(),
-                                                              o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000))
-
-        print('object idx ' + str(idx))
-        print('reg_p2p = ' + str(reg_p2p))
-
-        print("Transformation is:")
-        print(reg_p2p.transformation)
-
-        objects_data.append({'transformation': reg_p2p.transformation, 'rmse': reg_p2p.inlier_rmse})
-        # draw_registration_result(pcd_separate_object, pcd_cereal_box_ds, np.linalg.inv(reg_p2p.transformation))
-
-    # Select which of the objects in the table is a cereal box by getting the minimum rmse
-    min_rmse = None
-    min_rmse_idx = None
-
-    for idx, object_data in enumerate(objects_data):
-
-        if min_rmse is None:  # first object, use as minimum
-            min_rmse = object_data['rmse']
-            min_rmse_idx = idx
-
-        if object_data['rmse'] < min_rmse:
-            min_rmse = object_data['rmse']
-            min_rmse_idx = idx
-
-    print('Object idx ' + str(min_rmse_idx) + ' is the cereal box')
-    draw_registration_result(pcd_separate_objects[min_rmse_idx], pcd_cereal_box_ds,
-                             np.linalg.inv(objects_data[min_rmse_idx]['transformation']))
-
-    print(objects_data)
+#    print(objects_data)
 
   
     # --------------------------------------
@@ -228,16 +229,16 @@ def main():
     pcd_cropped.paint_uniform_color([0.9, 0.0, 0.0])
     pcd_table.paint_uniform_color([0.0, 0.0, 0.9])
 
-    # pcds_to_draw = [pcd_table]
-    # pcds_to_draw.extend(pcd_objects)
+    pcds_to_draw = [pcd_separate_objects]
+    #pcds_to_draw.extend(pcd_objects)
 
-    pcds_to_draw = [pcd_cereal_box_ds]
+    #pcds_to_draw = [pcd_cereal_box_ds]
 
     frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
 
     entities = []
     entities.append(frame_world)
-    # entities.append(frame_table)
+    entities.append(frame_table)
     entities.extend(pcds_to_draw)
     o3d.visualization.draw_geometries(entities,
                                       zoom=0.3412,
