@@ -245,12 +245,15 @@ def main():
         entiti.append(frame_world)
         entiti.append(object_data)
         print(idx)
-        print(object_data)
-        o3d.visualization.draw_geometries(entiti,
-                                      zoom=0.3412,
-                                      front=view['trajectory'][0]['front'],
-                                      lookat=view['trajectory'][0]['lookat'],
-                                      up=view['trajectory'][0]['up'], point_show_normal=False)
+        print('SSSSSSSSSSSSSSSS',object_data.points)
+        print('asdasdada',object_data.has_points)
+        #print(dir(object_data))
+        if len(object_data.points) > 1500:
+            o3d.visualization.draw_geometries(entiti,
+                                        zoom=0.3412,
+                                        front=view['trajectory'][0]['front'],
+                                        lookat=view['trajectory'][0]['lookat'],
+                                        up=view['trajectory'][0]['up'], point_show_normal=False)
             
     entities = []
     entities.append(frame_world)
