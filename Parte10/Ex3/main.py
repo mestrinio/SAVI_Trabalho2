@@ -92,7 +92,7 @@ def main():
     print('T=\n' + str(T))
 
     # Create table ref system and apply transformation to it
-    frame_table = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.2, origin=np.array([0., 0., 0.]))
+    frame_table = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.1, origin=np.array([0., 0., 0.]))
 
     frame_table = frame_table.transform(T)
 
@@ -105,7 +105,7 @@ def main():
 
     sx = sy = 0.6
     sz_top = 0.4
-    sz_bottom = -0.1
+    sz_bottom = -0.05
     np_vertices[0, 0:3] = [sx, sy, sz_top]
     np_vertices[1, 0:3] = [sx, -sy, sz_top]
     np_vertices[2, 0:3] = [-sx, -sy, sz_top]

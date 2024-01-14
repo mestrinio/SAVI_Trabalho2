@@ -155,7 +155,7 @@ def main():
     # Clustering
     # --------------------------------------
 
-    labels = pcd_objects.cluster_dbscan(eps=0.05, min_points=50, print_progress=True)
+    labels = pcd_objects.cluster_dbscan(eps=0.04, min_points=50, print_progress=True)
 
     print("Max label:", max(labels))
 
@@ -175,10 +175,9 @@ def main():
         pcd_separate_object.paint_uniform_color(color)
         pcd_separate_objects.append(pcd_separate_object)
 
-    print('HEREEEEEEEEEEEEEE', pcd_separate_objects)
-    # --------------------------------------
-    # ICP for object classification
-    # --------------------------------------
+#    # --------------------------------------
+#    # ICP for object classification
+#    # --------------------------------------
 #    pcd_cereal_box = o3d.io.read_point_cloud('../data/cereal_box_2_2_40.pcd')
 #    pcd_cereal_box_ds = pcd_cereal_box.voxel_down_sample(voxel_size=0.005)
 #    pcd_cereal_box_ds.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
@@ -218,10 +217,14 @@ def main():
 #    print('Object idx ' + str(min_rmse_idx) + ' is the cereal box')
 #    draw_registration_result(pcd_separate_objects[min_rmse_idx], pcd_cereal_box_ds,
 #                             np.linalg.inv(objects_data[min_rmse_idx]['transformation']))
+#
+
+    
+
 
 #    print(objects_data)
-
-  
+#
+    
     # --------------------------------------
     # Visualization ----------------------
     # --------------------------------------
@@ -229,13 +232,26 @@ def main():
     pcd_cropped.paint_uniform_color([0.9, 0.0, 0.0])
     pcd_table.paint_uniform_color([0.0, 0.0, 0.9])
 
-    pcds_to_draw = [pcd_separate_objects]
-    #pcds_to_draw.extend(pcd_objects)
+    #pcds_to_draw = [pcd_objects]
+    pcds_to_draw = (pcd_separate_objects)
 
     #pcds_to_draw = [pcd_cereal_box_ds]
 
     frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
 
+    for idx, object_data in enumerate(pcd_separate_objects):
+        frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
+        entiti = []
+        entiti.append(frame_world)
+        entiti.append(object_data)
+        print(idx)
+        print(object_data)
+        o3d.visualization.draw_geometries(entiti,
+                                      zoom=0.3412,
+                                      front=view['trajectory'][0]['front'],
+                                      lookat=view['trajectory'][0]['lookat'],
+                                      up=view['trajectory'][0]['up'], point_show_normal=False)
+            
     entities = []
     entities.append(frame_world)
     entities.append(frame_table)
