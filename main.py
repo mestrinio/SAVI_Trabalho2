@@ -4,7 +4,7 @@
 import glob
 import json
 from sklearn.model_selection import train_test_split
-from dataset_test import Dataset
+from dataset import Dataset
 import torch
 from torchvision import transforms
 import matplotlib.pyplot as plt
@@ -18,7 +18,7 @@ def main():
     # -----------------------------------------------------------------
     # Hyperparameters initialization
     # -----------------------------------------------------------------
-    batch_size = 100
+    batch_size = 32
     learning_rate = 0.001
     num_epochs = 50
 
@@ -37,8 +37,11 @@ def main():
 
     print('OLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 
-    train_filenames = dataset_filenames['train_filenames']
-    validation_filenames = dataset_filenames['validation_filenames']
+    # train_filenames = dataset_filenames['train_filenames']
+    # validation_filenames = dataset_filenames['validation_filenames']
+    train_filenames= '1\\data'
+    validation_filenames = '1\\data'
+
 
     # train_filenames = train_filenames[0:1000]
     # validation_filenames = validation_filenames[0:200]

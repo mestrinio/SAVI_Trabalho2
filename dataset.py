@@ -4,7 +4,7 @@
 import os
 import torch
 import re
-from torchvision import transforms
+from torchvision import transforms, datasets
 from PIL import Image
 
 pattern = '([a-z_]+)(?=_\d)'
@@ -12,12 +12,16 @@ pattern = '([a-z_]+)(?=_\d)'
 
     
 class Dataset(torch.utils.data.Dataset):
-    
 
     def __init__(self, filenames):
-        self.filenames = filenames
+        self.transforms = transforms.Compose([
+            transforms.Resize((256, 258)),
+            transforms.ToTensor()
+        ])
+        
+        self.filenames = datasets.ImageFolder(filenames,transform=self.transforms)
         self.number_of_images = len(self.filenames)
-        self.i=-1
+
         # Compute the corresponding labels
         # self.labels should be like ['cat', 'dog', 'cat'], but we will use [1, 0, 1] because of pytorch
         # self.labels = {}
@@ -35,10 +39,10 @@ class Dataset(torch.utils.data.Dataset):
         # filenames ['/home/mike/savi_datasets/dogs-vs-cats/train/cat.2832.jpg', '/home/mike/savi_datasets/dogs-vs-cats/train/cat.8274.jpg', '/home/mike/savi_datasets/dogs-vs-cats/train/cat.4537.jpg']
         # labels ['cat', 'cat', 'cat']
 
-        self.transforms = transforms.Compose([
-            transforms.Resize((224, 224)),
-            transforms.ToTensor()
-        ])
+        # self.transforms = transforms.Compose([
+        #     transforms.Resize((224, 224)),
+        #     transforms.ToTensor()
+        # ])
 
     def __len__(self):
         # must return the size of the data
@@ -46,18 +50,19 @@ class Dataset(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         # Must return the data of the corresponding index
-
+        transform2 = transforms.Compose([
+        transforms.ToPILImage(),
+        transforms.Resize((256,256))
+        ])
         # Load the image in pil format
-        filename = self.filenames[index]
-        pil_image = Image.open(filename)
+        img,label = self.filenames[index]
+        pil_image = transform2(img)
 
         # Convert to tensor
         tensor_image = self.transforms(pil_image)
 
         # Get corresponding label
         #label = self.labels[index]
-        match = re.search(pattern, filename)
-        label = match.group(1)
-        self.i += 1
+       
 
-        return tensor_image, self.i
+        return tensor_image, label
