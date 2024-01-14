@@ -9,7 +9,7 @@ from torchvision import transforms
 import matplotlib.pyplot as plt
 
 from model import Model
-from trainer import Trainer
+from deeplearning.trainer import Trainer
 
 
 def main():
