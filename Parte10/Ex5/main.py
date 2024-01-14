@@ -162,7 +162,7 @@ def main():
     group_idxs = list(set(labels))
     # group_idxs.remove(-1)  # remove last group because its the group on the unassigned points
     num_groups = len(group_idxs)
-    colormap = cm.Pastel1(range(0, num_groups))
+    #colormap = cm.Pastel1(range(0, num_groups))
 
     pcd_separate_objects = []
     for group_idx in group_idxs:  # Cycle all groups, i.e.,
@@ -171,8 +171,8 @@ def main():
 
         pcd_separate_object = pcd_objects.select_by_index(group_points_idxs, invert=False)
 
-        color = colormap[group_idx, 0:3]
-        pcd_separate_object.paint_uniform_color(color)
+        #color = colormap[group_idx, 0:3]
+        #pcd_separate_object.paint_uniform_color(color)
         pcd_separate_objects.append(pcd_separate_object)
 
 #    # --------------------------------------
@@ -240,14 +240,21 @@ def main():
     frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
 
     for idx, object_data in enumerate(pcd_separate_objects):
-        frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
+        
         entiti = []
         entiti.append(frame_world)
         entiti.append(object_data)
-        print(idx)
-        print('SSSSSSSSSSSSSSSS',object_data.points)
-        print('asdasdada',object_data.has_points)
-        #print(dir(object_data))
+        colors = object_data.colors
+        print(colors[5])
+        print(colors[1000])
+        o3d.io.write_point_cloud('teste.pcd', entiti, write_ascii = False, compressed = False, print_progress = False)
+
+        maxbound = o3d.geometry.PointCloud.get_max_bound(object_data)
+        minbound = o3d.geometry.PointCloud.get_min_bound(object_data)
+        print('MAXBOUND',maxbound)
+        print('minbound',minbound)
+        altura = maxbound [2] - minbound [2]
+        print('AAAAAA',altura)
         if len(object_data.points) > 1500:
             o3d.visualization.draw_geometries(entiti,
                                         zoom=0.3412,
