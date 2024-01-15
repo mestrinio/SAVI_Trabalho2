@@ -28,7 +28,7 @@ class Trainer():
         
         # Setup matplotlib figure
         plt.title('Training Cats vs Dogs', fontweight="bold")
-        plt.axis([0, self.num_epochs, 0, 10])
+        plt.axis([0, self.num_epochs, 0, 2])
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
         self.handle = None
@@ -124,8 +124,8 @@ class Trainer():
             self.model.eval()
             batch_losses = []
             for batch_idx, (inputs, labels_gt) in tqdm(enumerate(self.validation_loader),
-                                                    #    total=len(self.validation_loader),
-                                                       total=50,
+                                                       total=len(self.validation_loader),
+                                                       
                                                        desc='Validating batches for epoch ' + str(epoch_idx)):
 
                 # move tensors to device

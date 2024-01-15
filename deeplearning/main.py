@@ -86,7 +86,7 @@ def main():
                       validation_loader=validation_loader,
                       learning_rate=learning_rate,
                       num_epochs=num_epochs,
-                      model_path='models/checkpoint.pkl',
+                      model_path='models/checkpoint_t2.pkl',
                       load_model=True)
     trainer.train()
 

@@ -35,7 +35,7 @@ def main():
         # Reading from json file
         # dataset_filenames = json.load(f)
 
-    test_filenames = 'dataset'
+    test_filenames = 'dataset_base\\rgbd-dataset'
     # test_filenames = test_filenames[0:100]
 
     print('Used ' + str(len(test_filenames)) + ' for testing ')
@@ -55,7 +55,7 @@ def main():
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
     # Load the trained model
-    checkpoint = torch.load('models/checkpoint.pkl')
+    checkpoint = torch.load('models/checkpoint_t2.pkl')
     model.load_state_dict(checkpoint['model_state_dict'])
 
     model.to(device)

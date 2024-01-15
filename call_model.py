@@ -8,7 +8,7 @@ from deeplearning.model import Model
 loaded_model = Model()
 
 # Load the saved state_dict into the model
-loaded_model.load_state_dict(torch.load('saved_model.pth'))
+loaded_model.load_state_dict(torch.load('models\checkpoint_t2.pkl'))
 
 # Set the model to evaluation mode (important if using BatchNorm or Dropout)
 loaded_model.eval()
