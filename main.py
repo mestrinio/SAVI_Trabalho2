@@ -143,7 +143,7 @@ def main():
     # Plane segmentation
     # --------------------------------------
     plane_model, inlier_idxs = pcd_cropped.segment_plane(distance_threshold=0.02,
-                                                         ransac_n=3, num_iterations=100)
+                                                         ransac_n=100, num_iterations=1000)
 
     a, b, c, d = plane_model
     pcd_table = pcd_cropped.select_by_index(inlier_idxs, invert=False)
@@ -240,14 +240,14 @@ def main():
     frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
 
     for idx, object_data in enumerate(pcd_separate_objects):
-        
+        # IF MIN Z < -0.5
         entiti = []
         entiti.append(frame_world)
         entiti.append(object_data)
         colors = object_data.colors
-        print(colors[5])
-        print(colors[1000])
-        o3d.io.write_point_cloud('teste.pcd', entiti, write_ascii = False, compressed = False, print_progress = False)
+        #print(colors[5])
+        #print(colors[1000])
+        #o3d.io.write_point_cloud('teste.pcd', entiti, write_ascii = False, compressed = False, print_progress = False)
 
         maxbound = o3d.geometry.PointCloud.get_max_bound(object_data)
         minbound = o3d.geometry.PointCloud.get_min_bound(object_data)
