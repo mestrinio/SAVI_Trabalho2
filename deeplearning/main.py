@@ -4,13 +4,13 @@
 import glob
 import json
 from sklearn.model_selection import train_test_split
-from dataset import Dataset
+from dataset_class import Dataset
 import torch
 from torchvision import transforms
 import matplotlib.pyplot as plt
 
 from model import Model
-from deeplearning.trainer import Trainer
+from trainer import Trainer
 
 
 def main():
@@ -39,8 +39,8 @@ def main():
 
     # train_filenames = dataset_filenames['train_filenames']
     # validation_filenames = dataset_filenames['validation_filenames']
-    train_filenames= '1\\data'
-    validation_filenames = '1\\data'
+    train_filenames= 'dataset_base\data'
+    validation_filenames = 'dataset_base\data'
 
 
     # train_filenames = train_filenames[0:1000]

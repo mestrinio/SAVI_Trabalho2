@@ -28,7 +28,7 @@ class Trainer():
         
         # Setup matplotlib figure
         plt.title('Training Cats vs Dogs', fontweight="bold")
-        plt.axis([0, self.num_epochs, 0, 50])
+        plt.axis([0, self.num_epochs, 0, 10])
         plt.xlabel('Epoch')
         plt.ylabel('Loss')
         self.handle = None
