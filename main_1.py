@@ -174,10 +174,10 @@ def main():
         #color = colormap[group_idx, 0:3]
         #pcd_separate_object.paint_uniform_color(color)
         pcd_separate_objects.append(pcd_separate_object)
-        
-        #guardar as point clouds
-        filename = f"object_pcd_{idx:03}.pcd"
-        o3d.io.write_point_cloud(filename, pcd_separate_object)
+        # o mestre é very gay
+        #guardar as point clouds 
+        filename = os.path.join(os.getcwd(), 'imagens', f"object_pcd_{idx:03}.pcd")
+        o3d.io.write_point_cloud(filename, object_data) 
 #    # --------------------------------------
 #    # ICP for object classification
 #    # --------------------------------------
