@@ -105,10 +105,10 @@ def main():
     print('T=\n' + str(T))
 
     # Create table ref system and apply transformation to it
-    frame_table = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.2, origin=np.array([0., 0., 0.]))
-
-    frame_table = frame_table.transform(T)
-
+    #frame_table = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.2, origin=np.array([0., 0., 0.]))
+#
+    #frame_table = frame_table.transform(T)
+    
     pcd_downsampled = pcd_downsampled.transform(np.linalg.inv(T))
 
     # Ex3 - Create crop the points in the table
@@ -148,14 +148,23 @@ def main():
     a, b, c, d = plane_model
     pcd_table = pcd_cropped.select_by_index(inlier_idxs, invert=False)
     pcd_table.paint_uniform_color([1, 0, 0])
+    
+    pcd_table.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
+    pcd_table.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
+    table_center = pcd_table.get_center()
+    
+    frame_table = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.2, origin=table_center)
 
+    #frame_table = frame_table.transform(T)
+    
+    pcd_downsampled = pcd_downsampled.transform(np.linalg.inv(T))
     pcd_objects = pcd_cropped.select_by_index(inlier_idxs, invert=True)
 
     # --------------------------------------
     # Clustering
     # --------------------------------------
 
-    labels = pcd_objects.cluster_dbscan(eps=0.04, min_points=50, print_progress=True)
+    labels = pcd_objects.cluster_dbscan(eps=0.02, min_points=100, print_progress=True)
 
     print("Max label:", max(labels))
 
