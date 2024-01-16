@@ -20,7 +20,7 @@ def main():
     # -----------------------------------------------------------------
     batch_size = 32
     learning_rate = 0.001
-    num_epochs = 5
+    num_epochs = 20
 
     # -----------------------------------------------------------------
     # Create model
@@ -35,7 +35,7 @@ def main():
         # Reading from json file
         dataset_filenames = json.load(f)
 
-    print('OLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
+    # print('OLAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA')
 
     train_filenames = dataset_filenames['train_filenames']
     validation_filenames = dataset_filenames['validation_filenames']
@@ -56,7 +56,7 @@ def main():
     # Try the train_dataset
     train_loader = torch.utils.data.DataLoader(dataset=train_dataset, batch_size=batch_size, shuffle=True)
     validation_loader = torch.utils.data.DataLoader(dataset=validation_dataset, batch_size=batch_size, shuffle=True)
-    print('cuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
+    # print('cuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu')
     # Just for testing the train_loader
     tensor_to_pil_image = transforms.ToPILImage()
 
@@ -91,7 +91,7 @@ def main():
     trainer.train()
 
     plt.show()
-
+    
 
 if __name__ == "__main__":
-    main()
+    main

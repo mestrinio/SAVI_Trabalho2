@@ -63,7 +63,7 @@ class Trainer():
         # Resume model or start from scratch
         if self.load_model:
             checkpoint = torch.load(self.model_path,map_location='cpu')
-            print('gayyyyyyyyyyyyyyyyyyyyyyys')
+            # print('gayyyyyyyyyyyyyyyyyyyyyyys')
 
             self.model.load_state_dict(checkpoint['model_state_dict'])
 

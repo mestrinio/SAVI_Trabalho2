@@ -6,7 +6,7 @@ import torch
 from torchvision import transforms
 from PIL import Image
 import re
-from labels import switch
+
 
 
 pattern = '([a-z_]+)(?=_\d)'
@@ -38,6 +38,7 @@ class Dataset(torch.utils.data.Dataset):
             label = match.group(1)
             if all(item != label for item in self.name):
                 self.name.append(label)
+        self.name.sort()
         print(self.name)
             # else:
             #     self.name[label]=[filename]

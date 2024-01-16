@@ -4,7 +4,7 @@
 import glob
 import json
 from sklearn.model_selection import train_test_split
-from dataset_class import Dataset
+from dataset_random import Dataset
 import torch
 from torchvision import transforms
 import matplotlib.pyplot as plt
@@ -21,7 +21,7 @@ def main():
     # Hyperparameters initialization
     # -----------------------------------------------------------------
     learning_rate = 0.001
-    num_epochs = 50
+    num_epochs = 20
 
     # -----------------------------------------------------------------
     # Create model
@@ -31,11 +31,12 @@ def main():
     # -----------------------------------------------------------------
     # Prepare Datasets
     # -----------------------------------------------------------------
-    # with open('../Ex0_split_dataset/dataset_filenames.json', 'r') as f:
+    with open('dataset_filenames.json', 'r') as f:
         # Reading from json file
-        # dataset_filenames = json.load(f)
+        dataset_filenames = json.load(f)
 
-    test_filenames = 'dataset_base\\data'
+
+    test_filenames = dataset_filenames['test_filenames']
     # test_filenames = test_filenames[0:100]
 
     print('Used ' + str(len(test_filenames)) + ' for testing ')
@@ -71,7 +72,7 @@ def main():
         labels_predicted = model.forward(inputs)
 
     # Transform predicted labels into probabilities
-    predicted_probabilities = F.softmax(labels_predicted, dim=1).tolist()
+    predicted_probabilities = F.softmax(labels_predicted, dim=51).tolist()
     print(predicted_probabilities)
 
     probabilities_dog = [x[0] for x in predicted_probabilities]
