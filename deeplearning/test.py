@@ -72,7 +72,7 @@ def main():
         labels_predicted = model.forward(inputs)
 
     # Transform predicted labels into probabilities
-    predicted_probabilities = F.softmax(labels_predicted, dim=51).tolist()
+    predicted_probabilities = F.softmax(labels_predicted, dim=1).tolist()
     print(predicted_probabilities)
 
     probabilities_dog = [x[0] for x in predicted_probabilities]
