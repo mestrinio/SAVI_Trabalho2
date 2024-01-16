@@ -5,7 +5,11 @@ import os
 import torch
 from torchvision import transforms
 from PIL import Image
+import re
+from labels import switch
 
+
+pattern = '([a-z_]+)(?=_\d)'
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -27,6 +31,30 @@ class Dataset(torch.utils.data.Dataset):
         #         self.labels.append(1)
         #     else:
         #         raise ValueError('Unknown label ' + label)
+        self.name = []
+        
+        for filename in self.filenames:
+            match = re.search(pattern, filename)
+            label = match.group(1)
+            if all(item != label for item in self.name):
+                self.name.append(label)
+        print(self.name)
+            # else:
+            #     self.name[label]=[filename]
+            
+                
+
+        # files=files_+files_1
+        # print(files)
+        # for label_ in self.name:
+        #     print(label_)
+        #     apple_len= 0
+        # self.labels = self.name[label]
+        # self.labels = switch(self.name,len(self.name[label[1]]))
+        # print (self.labels)
+        # self.labels = switch(self.filenames)
+
+
 
         # print(self.filenames[0:3])
         # print(self.labels[0:3])
@@ -47,6 +75,7 @@ class Dataset(torch.utils.data.Dataset):
         # Must return the data of the corresponding index
 
         # Load the image in pil format
+        # print(index)
         filename = self.filenames[index]
         pil_image = Image.open(filename)
 
@@ -54,6 +83,15 @@ class Dataset(torch.utils.data.Dataset):
         tensor_image = self.transforms(pil_image)
 
         # Get corresponding label
-        label = self.labels[index]
+        match = re.search(pattern, filename)
+        label = match.group(1)
+        label_num = -1
+        for  idx,item in enumerate(self.name):
+            if item == label:
+                label_num  = idx 
+                break
+        # print('label =' + label + ' idx = ' ,label_num)
 
-        return tensor_image, label
+        # label = self.labels[index]
+
+        return tensor_image, label_num

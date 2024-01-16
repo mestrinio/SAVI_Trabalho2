@@ -15,7 +15,7 @@ class Dataset(torch.utils.data.Dataset):
 
     def __init__(self, filenames):
         self.transforms = transforms.Compose([
-            transforms.Resize((256, 258)),
+            transforms.Resize((256, 256)),
             transforms.ToTensor()
         ])
         

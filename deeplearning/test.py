@@ -35,7 +35,7 @@ def main():
         # Reading from json file
         # dataset_filenames = json.load(f)
 
-    test_filenames = 'dataset_base\\rgbd-dataset'
+    test_filenames = 'dataset_base\\data'
     # test_filenames = test_filenames[0:100]
 
     print('Used ' + str(len(test_filenames)) + ' for testing ')
