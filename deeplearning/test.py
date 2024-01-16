@@ -73,14 +73,15 @@ def main():
 
     # Transform predicted labels into probabilities
     predicted_probabilities = F.softmax(labels_predicted, dim=1).tolist()
-    print(predicted_probabilities)
+    print(' predicted' + str(predicted_probabilities))
 
     probabilities_dog = [x[0] for x in predicted_probabilities]
-
-    print(probabilities_dog)
+    max_pred = max(probabilities_dog)
+    print(str(probabilities_dog) + ', max' + str(max_pred))
 
     # Make a decision using the largest probability
     predicted_is_dog = [x > 0.5 for x in probabilities_dog]
+    
     print('predicted_is_dog=' + str(predicted_is_dog))
 
     labels_gt_np = labels_gt.cpu().detach().numpy()
