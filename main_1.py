@@ -10,7 +10,7 @@
 
 from copy import deepcopy
 import math
-
+import os
 import open3d as o3d
 import numpy as np
 from matplotlib import cm
@@ -174,10 +174,7 @@ def main():
         #color = colormap[group_idx, 0:3]
         #pcd_separate_object.paint_uniform_color(color)
         pcd_separate_objects.append(pcd_separate_object)
-        # o mestre é very gay
-        #guardar as point clouds 
-        filename = os.path.join(os.getcwd(), 'imagens', f"object_pcd_{idx:03}.pcd")
-        o3d.io.write_point_cloud(filename, object_data) 
+
 #    # --------------------------------------
 #    # ICP for object classification
 #    # --------------------------------------
@@ -247,10 +244,6 @@ def main():
         entiti = []
         entiti.append(frame_world)
         entiti.append(object_data)
-        colors = object_data.colors
-        print(colors[5])
-        print(colors[1000])
-        o3d.io.write_point_cloud('teste.pcd', entiti, write_ascii = False, compressed = False, print_progress = False)
 
         maxbound = o3d.geometry.PointCloud.get_max_bound(object_data)
         minbound = o3d.geometry.PointCloud.get_min_bound(object_data)
@@ -258,6 +251,12 @@ def main():
         print('minbound',minbound)
         altura = maxbound [2] - minbound [2]
         print('AAAAAA',altura)
+        
+
+        #guardar as point clouds 
+        filename = f"object_pcd_{idx:03}.pcd"
+        o3d.io.write_point_cloud(filename, object_data) 
+        
         if len(object_data.points) > 1500:
             o3d.visualization.draw_geometries(entiti,
                                         zoom=0.3412,
