@@ -67,48 +67,75 @@ def main():
         # move tensors to device
         inputs = inputs.to(device)
         labels_gt = labels_gt.to(device)
+        print(labels_gt)
 
         # Get predicted labels
         labels_predicted = model.forward(inputs)
 
+
     # Transform predicted labels into probabilities
     predicted_probabilities = F.softmax(labels_predicted, dim=1).tolist()
-    print(' predicted' + str(predicted_probabilities))
-
-    probabilities_dog = [x[0] for x in predicted_probabilities]
-    max_pred = max(probabilities_dog)
-    print(str(probabilities_dog) + ', max' + str(max_pred))
+    # print(' predicted' + str(predicted_probabilities))
+    probabilities = [ []  for i in range(51)]
+    # probabilities_dog = [x[0] for x in predicted_probabilities]
+    for x in predicted_probabilities:
+        for i, probabilitie in enumerate(probabilities):
+            
+            probabilitie.append(x[i] > 0.95 )
+    
 
     # Make a decision using the largest probability
-    predicted_is_dog = [x > 0.5 for x in probabilities_dog]
+    # predicted_is_dog = [x > 0.5 for x in probabilities_dog]
     
-    print('predicted_is_dog=' + str(predicted_is_dog))
 
     labels_gt_np = labels_gt.cpu().detach().numpy()
-    ground_truth_is_dog = [x == 0 for x in labels_gt_np]
-    print('ground_truth_is_dog=' + str(ground_truth_is_dog))
+    ground_truths = [ [] for i in range(51)]
+    for i, ground_truth in enumerate(ground_truths):
+        for label in labels_gt_np:
+            ground_truth.append(label == i )
+
+    # ground_truth_is_dog = [x == 0 for x in labels_gt_np]
+    # print('ground_truth_is_dog=' + str(ground_truth_is_dog))
 
     # labels_predicted_np = labels_predicted.cpu().detach().numpy()
     # print('labels_gt_np = ' + str(labels_gt_np))
     # print('labels_predicted_np = ' + str(labels_predicted_np))
 
     # Count FP, FN, TP, and TN
-    TP, FP, TN, FN = 0, 0, 0, 0
-    for gt, pred in zip(ground_truth_is_dog, predicted_is_dog):
+    TPs = []
+    FPs = []
+    TNs = []
+    FNs = []
+    precisions = []
+    recalls = []
+    f1_scores = []
+    for ground_truth, probabilitie in zip(ground_truths, probabilities):
+        TP, FP, TN, FN = 0, 0, 0, 0
+        for gt, pred in zip(ground_truth, probabilitie):
+            
+            if gt == 1 and pred == 1:  # True positive
+                TP += 1
+            elif gt == 0 and pred == 1:  # False positive
+                FP += 1
+            elif gt == 1 and pred == 0:  # False negative
+                FN += 1
+            elif gt == 0 and pred == 0:  # True negative
+                TN += 1
+        TPs.append(TP)
+        FPs.append(FP)
+        FNs.append(FN)
+        TNs.append(TN)
+        precision = TP / (TP + FP)
+        precisions.append(precision)
+        recall = TP / (TP + FN)
+        recalls.append(recall)
+        f1_score = 2 * (precision*recall)/(precision+recall)
+        f1_scores.append(f1_score)
 
-        if gt == 1 and pred == 1:  # True positive
-            TP += 1
-        elif gt == 0 and pred == 1:  # False positive
-            FP += 1
-        elif gt == 1 and pred == 0:  # False negative
-            FN += 1
-        elif gt == 0 and pred == 0:  # True negative
-            TN += 1
-
-    print('TP = ' + str(TP))
-    print('TN = ' + str(TN))
-    print('FP = ' + str(FP))
-    print('FN = ' + str(FN))
+    print('TP = ' + str(TPs))    
+    print('TN = ' + str(TNs))
+    print('FP = ' + str(FPs))
+    print('FN = ' + str(FNs))
 
     # Compute precision and recall
     precision = TP / (TP + FP)
@@ -129,8 +156,8 @@ def main():
         for col in range(4):
             image_tensor = inputs[idx_image, :, :, :]
             image_pil = tensor_to_pil_image(image_tensor)
-            print('ground_truth is dog = ' + str(ground_truth_is_dog[idx_image]))
-            print('predicted is dog = ' + str(predicted_is_dog[idx_image]))
+            # print('ground_truth is dog = ' + str(ground_truth_is_dog[idx_image]))
+            # print('predicted is dog = ' + str(predicted_is_dog[idx_image]))
 
             ax = fig.add_subplot(4, 4, idx_image+1)
             plt.imshow(image_pil)
@@ -140,18 +167,19 @@ def main():
             ax.yaxis.set_ticks([])
 
             text = 'GT '
-            if ground_truth_is_dog[idx_image]:
+            
+            if ground_truths[0][idx_image]:
                 text += 'is dog'
             else:
                 text += 'is not dog'
 
             text += '\nPred '
-            if predicted_is_dog[idx_image]:
+            if predicted_probabilities[0][idx_image]:
                 text += 'is dog'
             else:
                 text += 'is not dog'
 
-            if ground_truth_is_dog[idx_image] == predicted_is_dog[idx_image]:
+            if ground_truths[0][idx_image] == predicted_probabilities[0][idx_image]:
                 color = 'green'
             else:
                 color = 'red'

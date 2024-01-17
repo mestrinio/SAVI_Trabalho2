@@ -15,7 +15,10 @@ import open3d as o3d
 import numpy as np
 from matplotlib import cm
 from more_itertools import locate
+from call_model import Call_Md
 
+inputs = []
+outputs = Call_Md(inputs)
 view = {
     "class_name": "ViewTrajectory",
     "interval": 29,
