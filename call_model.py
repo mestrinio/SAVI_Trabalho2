@@ -15,6 +15,17 @@ loaded_model.eval()
 
 def Call_Md(inputs):
     outputs = loaded_model(inputs)
+    
+    # Transform predicted labels into probabilities
+    predicted_probabilities = F.softmax(labels_predicted, dim=1).tolist()
+    # print(' predicted' + str(predicted_probabilities))
+    probabilities = [ []  for i in range(51)]
+    # probabilities_dog = [x[0] for x in predicted_probabilities]
+    for x in predicted_probabilities:
+        for i, probabilitie in enumerate(probabilities):
+            
+            probabilitie.append(x[i] > 0.95 )
 
-    return outputs
+    
+    return outputs,probabilities
 

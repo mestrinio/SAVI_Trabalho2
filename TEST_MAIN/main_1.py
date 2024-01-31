@@ -51,7 +51,17 @@ def draw_registration_result(source, target, transformation):
 
 
 def main():
-
+    # -----------------------------------------------------------------
+    # Labels
+    # -----------------------------------------------------------------
+    labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
+               'camera', 'cap', 'cell phone', 'cereal box', 'coffee mug', 'comb', 'dry battery',
+                'flashlight', 'food bag', 'food box', 'food can', 'food cup', 'food jar',
+                'garlic', 'glue stick', 'greens', 'hand towel', 'instant noodles', 'keyboard',
+                'kleenex', 'lemon', 'lightbulb', 'lime', 'marker', 'mushroom', 'notebook',
+                'onion', 'orange', 'peach', 'pear', 'pitcher', 'plate', 'pliers', 'potato',
+                'rubber eraser', 'scissors', 'shampoo', 'soda can', 'sponge', 'stapler', 
+                'tomato', 'toothbrush', 'toothpaste', 'water bottle']
     # -----------------------------------------------------------------
     # Initialization
     # -----------------------------------------------------------------
