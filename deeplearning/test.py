@@ -141,54 +141,110 @@ def main():
     precision = TP / (TP + FP)
     recall = TP / (TP + FN)
     f1_score = 2 * (precision*recall)/(precision+recall)
+    
 
-    print('Precision = ' + str(precision))
-    print('Recall = ' + str(recall))
-    print('F1 score = ' + str(f1_score))
+
+    labels = ['apple', 'ball', 'banana', 'bell_pepper', 'binder', 'bowl', 'calculator',
+               'camera', 'cap', 'cell_phone', 'cereal_box', 'coffee_mug', 'comb', 'dry_battery',
+                'flashlight', 'food_bag', 'food_box', 'food_can', 'food_cup', 'food_jar',
+                'garlic', 'glue_stick', 'greens', 'hand_towel', 'instant_noodles', 'keyboard',
+                'kleenex', 'lemon', 'lightbulb', 'lime', 'marker', 'mushroom', 'notebook',
+                'onion', 'orange', 'peach', 'pear', 'pitcher', 'plate', 'pliers', 'potato',
+                'rubber_eraser', 'scissors', 'shampoo', 'soda_can', 'sponge', 'stapler', 
+                'tomato', 'toothbrush', 'toothpaste', 'water_bottle']
+    classes={}
+    
+        
+    for i,name in enumerate(labels):
+      
+        # dic_names= {name}
+        classes[i]={"class_index": i+1,
+                        "class_label": name,
+                        "metrics": {
+                        "precision": 0 ,
+                        "recall": 0 ,
+                        "f1_score":0 ,
+                        "TP": 0,
+                        "TN": 0,
+                        "FP": 0,
+                        "FN": 0
+                        }}
+        
+        # class_['class_index']=i
+        # class_['class_label']=name 
+
+    # for i,x in enumerate(precisions):
+    #     # print('Precision = ' + str(precisions[i]))
+    #     classes['metrics']['precision'] = x
+    #     i=i+1
+
+    for i in range(51):
+        classes[i]['metrics']['precision']=precisions[i]
+        classes[i]['metrics']['recall']=recalls[i]
+        classes[i]['metrics']['f1_score']=f1_scores[i]
+        classes[i]['metrics']['TP']=TPs[i]
+        classes[i]['metrics']['TN']=TNs[i]
+        classes[i]['metrics']['FP']=FPs[i]
+        classes[i]['metrics']['FN']=FNs[i]
+
+
+
+    # for i,_ in enumerate(recalls):
+    #     print('Recall = ' + str(recalls[i]))
+    #     i=i+1
+
+    # for i,_ in enumerate(f1_scores):
+    #     print('F1 score = ' + str(f1_scores[i]))
+    #     i=i+1    
+
+ 
 
     # Show image
     # inputs = inputs.cpu().detach()
     # print(inputs)
+    for i in range(51):
+        print(classes[i])
 
     fig = plt.figure()
     idx_image = 0
-    for row in range(4):
-        for col in range(4):
+    for row in range(7):
+        for col in range(8):
             image_tensor = inputs[idx_image, :, :, :]
             image_pil = tensor_to_pil_image(image_tensor)
             # print('ground_truth is dog = ' + str(ground_truth_is_dog[idx_image]))
             # print('predicted is dog = ' + str(predicted_is_dog[idx_image]))
 
-            ax = fig.add_subplot(4, 4, idx_image+1)
+            ax = fig.add_subplot(7, 8, idx_image+1)
             plt.imshow(image_pil)
             ax.xaxis.set_ticklabels([])
             ax.yaxis.set_ticklabels([])
             ax.xaxis.set_ticks([])
             ax.yaxis.set_ticks([])
 
-            text = 'GT '
+            # text = 'GT '
             
-            if ground_truths[0][idx_image]:
-                text += 'is dog'
-            else:
-                text += 'is not dog'
+            # if ground_truths[0][idx_image]:
+            #     text += 'is dog'
+            # else:
+            #     text += 'is not dog'
 
-            text += '\nPred '
-            if predicted_probabilities[0][idx_image]:
-                text += 'is dog'
-            else:
-                text += 'is not dog'
+            # text += '\nPred '
+            # if predicted_probabilities[0][idx_image]:
+            #     text += 'is dog'
+            # else:
+            #     text += 'is not dog'
 
-            if ground_truths[0][idx_image] == predicted_probabilities[0][idx_image]:
-                color = 'green'
-            else:
-                color = 'red'
+            # if ground_truths[0][idx_image] == predicted_probabilities[0][idx_image]:
+            #     color = 'green'
+            # else:
+            #     color = 'red'
 
-            ax.set_xlabel(text, color=color)
-
-            idx_image += 1
+            # ax.set_xlabel(text, color=color)
+            if idx_image <56:
+                idx_image += 1
 
     plt.show()
+    
 
 
     # plt.show()
