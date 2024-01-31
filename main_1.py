@@ -15,6 +15,7 @@ import open3d as o3d
 import numpy as np
 from matplotlib import cm
 from more_itertools import locate
+import call_model
 
 view = {
     "class_name": "ViewTrajectory",

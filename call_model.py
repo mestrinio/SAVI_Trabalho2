@@ -1,6 +1,6 @@
 import os
 import torch
-import torch.nn as nn
+import torch.nn.functional as F
 from deeplearning.model import Model
 
 
@@ -8,14 +8,17 @@ from deeplearning.model import Model
 loaded_model = Model()
 
 # Load the saved state_dict into the model
-loaded_model.load_state_dict(torch.load('models\checkpoint_t2.pkl'))
+checkpoint = torch.load("models/checkpoint_t2.pkl")
+loaded_model.load_state_dict(checkpoint["model_state_dict"])
 
 # Set the model to evaluation mode (important if using BatchNorm or Dropout)
 loaded_model.eval()
 
+
+
 def Call_Md(inputs):
     outputs = loaded_model(inputs)
-    
+    labels_predicted = loaded_model.forward(inputs)
     # Transform predicted labels into probabilities
     predicted_probabilities = F.softmax(labels_predicted, dim=1).tolist()
     # print(' predicted' + str(predicted_probabilities))
