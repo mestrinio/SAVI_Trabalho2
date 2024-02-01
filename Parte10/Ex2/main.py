@@ -100,13 +100,13 @@ def main():
 
     # Visualization ----------------------
     pcds_to_draw = [pcd_downsampled]
-
+    pcd_original = o3d.io.read_point_cloud('/home/mestre/Desktop/SAVI/REPO_eu_SAVI/TP2/SAVI_Trabalho2/rgbd-scenes-v2/pcdscenes/01.pcd')
     frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
 
     entities = []
     entities.append(frame_world)
     # entities.append(frame_table)
-    entities.extend(pcds_to_draw)
+    entities.append(pcd_original)
     o3d.visualization.draw_geometries(entities,
                                       zoom=0.3412,
                                       front=view['trajectory'][0]['front'],

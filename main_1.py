@@ -63,11 +63,28 @@ def main():
                 'onion', 'orange', 'peach', 'pear', 'pitcher', 'plate', 'pliers', 'potato',
                 'rubber eraser', 'scissors', 'shampoo', 'soda can', 'sponge', 'stapler', 
                 'tomato', 'toothbrush', 'toothpaste', 'water bottle']
+    
+    
     # -----------------------------------------------------------------
     # Initialization
     # -----------------------------------------------------------------
-    pcd_original = o3d.io.read_point_cloud('01.ply')
+    pcd_original = o3d.io.read_point_cloud('rgbd-scenes-v2/pcdscenes/01.pcd')
+    
+    # Downsample using voxel grid ------------------------------------
+    pcd_downsampled = pcd_original.voxel_down_sample(voxel_size=0.003)
+    # pcd_downsampled.paint_uniform_color([1,0,0])
 
+    # estimate normals
+    pcd_downsampled.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
+    pcd_downsampled.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
+    
+    frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
+    initial_scene = []
+    initial_scene.append(frame_world)
+    
+    
+
+    
     # -----------------------------------------------------------------
     # Execution
     # -----------------------------------------------------------------
@@ -109,7 +126,7 @@ def main():
     T2[0:3, 2] = [0, 0, 1]  # add a vector
 
     # Add a translation
-    T2[0:3, 3] = [0.8, 1, -0.4]
+    T2[0:3, 3] = [0.8, 1, -0.31]
     print('T2=\n' + str(T2))
 
     T = np.dot(T1, T2)
@@ -166,7 +183,7 @@ def main():
     # Clustering
     # --------------------------------------
 
-    labels = pcd_objects.cluster_dbscan(eps=0.04, min_points=50, print_progress=True)
+    labels = pcd_objects.cluster_dbscan(eps=0.02, min_points=50, print_progress=True)
 
     print("Max label:", max(labels))
 
@@ -229,17 +246,13 @@ def main():
 #    draw_registration_result(pcd_separate_objects[min_rmse_idx], pcd_cereal_box_ds,
 #                             np.linalg.inv(objects_data[min_rmse_idx]['transformation']))
 #
-
-    
-
-
 #    print(objects_data)
 #
     
     # --------------------------------------
     # Visualization ----------------------
     # --------------------------------------
-    pcd_downsampled.paint_uniform_color([0.4, 0.3, 0.3])
+    #pcd_downsampled.paint_uniform_color([0.4, 0.3, 0.3])
     pcd_cropped.paint_uniform_color([0.9, 0.0, 0.0])
     pcd_table.paint_uniform_color([0.0, 0.0, 0.9])
 
@@ -249,7 +262,18 @@ def main():
     #pcds_to_draw = [pcd_cereal_box_ds]
 
     frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
-
+    initial_scene.append(pcd_downsampled)
+    o3d.visualization.draw_geometries(initial_scene,
+                                      zoom=0.3412,
+                                      front=view['trajectory'][0]['front'],
+                                      lookat=view['trajectory'][0]['lookat'],
+                                      up=view['trajectory'][0]['up'], point_show_normal=False)
+    
+    
+    good_objects =  []
+    show_final = []
+    show_final.append(frame_world)
+    
     for idx, object_data in enumerate(pcd_separate_objects):
         
         entiti = []
@@ -261,29 +285,43 @@ def main():
         print('MAXBOUND',maxbound)
         print('minbound',minbound)
         altura = maxbound [2] - minbound [2]
-        print('AAAAAA',altura)
+        comprimento = maxbound [0] - minbound [0]
+        largura = maxbound [1] - minbound [1]
+        print('ALTURA',altura)
+        print('COMP',comprimento)
+        print('LARG',largura)
         
 
         #guardar as point clouds 
-        filename = f"object_pcd_{idx:03}.pcd"
-        o3d.io.write_point_cloud(filename, object_data) 
+        if  largura < 0.50 and comprimento < 0.50:
+            filename = f"object_pcd_{idx:03}.pcd"
+            o3d.io.write_point_cloud(filename, object_data) 
         
-        if len(object_data.points) > 1500:
-            o3d.visualization.draw_geometries(entiti,
+            if len(object_data.points) > 1500:
+                o3d.visualization.draw_geometries(entiti,
                                         zoom=0.3412,
                                         front=view['trajectory'][0]['front'],
                                         lookat=view['trajectory'][0]['lookat'],
                                         up=view['trajectory'][0]['up'], point_show_normal=False)
-            
-    entities = []
-    entities.append(frame_world)
-    entities.append(frame_table)
-    entities.extend(pcds_to_draw)
-    o3d.visualization.draw_geometries(entities,
-                                      zoom=0.3412,
-                                      front=view['trajectory'][0]['front'],
-                                      lookat=view['trajectory'][0]['lookat'],
-                                      up=view['trajectory'][0]['up'], point_show_normal=False)
+                good_objects.append(object_data)
+                
+    show_final.extend(good_objects)
+    
+    o3d.visualization.draw_geometries(show_final,
+                                        zoom=0.3412,
+                                        front=view['trajectory'][0]['front'],
+                                        lookat=view['trajectory'][0]['lookat'],
+                                        up=view['trajectory'][0]['up'], point_show_normal=False)
+    
+    #entities = []
+    #entities.append(frame_world)
+    #entities.append(frame_table)
+    #entities.extend(pcds_to_draw)
+    #o3d.visualization.draw_geometries(entities,
+    #                                  zoom=0.3412,
+    #                                  front=view['trajectory'][0]['front'],
+    #                                  lookat=view['trajectory'][0]['lookat'],
+    #                                  up=view['trajectory'][0]['up'], point_show_normal=False)
 
     # -----------------------------------------------------------------
     # Termination

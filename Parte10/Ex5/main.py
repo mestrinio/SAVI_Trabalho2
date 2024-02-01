@@ -240,7 +240,7 @@ def main():
     frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
 
     for idx, object_data in enumerate(pcd_separate_objects):
-        
+        print('OLAAAAAAAAAAAAAAAAAAAAAAA')
         entiti = []
         entiti.append(frame_world)
         entiti.append(object_data)
