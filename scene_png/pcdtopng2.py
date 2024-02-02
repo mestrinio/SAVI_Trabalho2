@@ -5,9 +5,12 @@ from matplotlib import pyplot as plt
 # Load PCD file
 paths =['object_pcd_000.pcd','object_pcd_001.pcd','object_pcd_002.pcd','object_pcd_003.pcd','object_pcd_003.pcd',
         'object_pcd_004.pcd','object_pcd_005.pcd','object_pcd_006.pcd','object_pcd_007.pcd','object_pcd_008.pcd']
+
+# Load PCD file
 for path in (paths):
     pcd = o3d.io.read_point_cloud(path)
 
+    # Print basic information about the point cloud
     print("Loaded point cloud:")
     print(pcd)
     # Extract points and colors from the PCD file
@@ -29,6 +32,7 @@ for path in (paths):
     # Display the image
     plt.imshow(image)
     plt.show()
+
 
 # Save the image as a PNG file
 # plt.imsave('output_image.png', image)

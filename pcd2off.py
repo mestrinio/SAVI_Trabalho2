@@ -22,7 +22,7 @@ def convert_pcd_to_off(pcd_file, off_file):
 
 
 # Get filenames of all images (including sub-folders)
-dataset_filenames = glob.glob('data/rgbd-dataset/***/**/*.pcd', recursive=True)
+dataset_filenames = glob.glob('data\\objects_pcd\\rgbd-dataset\\***\\**\\*.pcd', recursive=True)
 
 # Check if dataset data exists
 if len(dataset_filenames) < 1:
