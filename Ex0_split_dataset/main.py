@@ -11,8 +11,8 @@ def main():
     # -----------------------------------------------------------------
     # Prepare Datasets
     # -----------------------------------------------------------------
-    data_path = 'C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/dataset/'
-    image_filenames = glob.glob(data_path + '*_crop.png')
+    data_path = 'C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/data/objects_pcd/rgbd-dataset/'
+    image_filenames = glob.glob(data_path + '***/**/*.off')
     # To test the script in good time, select only 1000 of the 25000 images
 
     # Use a rule of 70% train, 20% validation, 10% test
@@ -32,7 +32,7 @@ def main():
     json_object = json.dumps(d, indent=2)
 
     # Writing to sample.json
-    with open("dataset_filenames.json", "w") as outfile:
+    with open("PointCloud_Learning\dataset_filenames_off.json", "w") as outfile:
         outfile.write(json_object)
 
 
