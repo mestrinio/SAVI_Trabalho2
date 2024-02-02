@@ -372,6 +372,18 @@ def main():
                                         lookat=view['trajectory'][0]['lookat'],
                                         up=view['trajectory'][0]['up'], point_show_normal=False)
     
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     # Initialize window
     #gui.Application.instance.initialize()
     #window = gui.Application.instance.create_window("Results", 1024, 768)   # 4x3
