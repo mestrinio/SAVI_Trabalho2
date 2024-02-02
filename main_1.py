@@ -330,7 +330,7 @@ def main():
 
         #guardar as point clouds 
         if  largura < 0.50 and comprimento < 0.50:
-            filename = f"data/objects_pcd/rbgd_datasets/separate/object_pcd_{idx:03}.pcd"
+            filename = f"object_pcd_{idx:03}.pcd"
             o3d.io.write_point_cloud(filename, object_data) 
         
             if len(object_data.points) > 1500:

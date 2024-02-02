@@ -9,7 +9,6 @@ def getpngfromscene(scene_path,crops):
     obj_path = "rgbd-scenes-v2/outro/rgbd-scenes-v2/imgs/scene_" + scene + '/00650-color.png'
 
     image = cv2.imread(obj_path)
-    cv2.imshow('img',image)
-    cv2.waitKey(0)
+
     
     
