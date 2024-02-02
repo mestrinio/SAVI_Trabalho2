@@ -23,8 +23,9 @@ warnings.filterwarnings("ignore")
 # General parameters
 NUM_TRAIN_POINTS = 2500
 NUM_TEST_POINTS = 10000
-NUM_CLASSES = 16
-ROOT = r''
+NUM_CLASSES = 51
+ROOT = r'PointCloud_Learning\dataset_filenames_off.json'
+
 
 # model hyperparameters
 GLOBAL_FEATS = 1024
@@ -48,8 +49,19 @@ CATEGORIES = {
     # 'Pistol': 12, 
     # 'Rocket': 13, 
     # 'Skateboard': 14, 
-    # 'Table': 15}
-            
+    # 'Table': 15
+    }
+labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
+            'camera', 'cap', 'cell phone', 'cereal box', 'coffee mug', 'comb', 'dry battery',
+            'flashlight', 'food bag', 'food box', 'food can', 'food cup', 'food jar',
+            'garlic', 'glue stick', 'greens', 'hand towel', 'instant noodles', 'keyboard',
+            'kleenex', 'lemon', 'lightbulb', 'lime', 'marker', 'mushroom', 'notebook',
+            'onion', 'orange', 'peach', 'pear', 'pitcher', 'plate', 'pliers', 'potato',
+            'rubber eraser', 'scissors', 'shampoo', 'soda can', 'sponge', 'stapler', 
+            'tomato', 'toothbrush', 'toothpaste', 'water bottle']
+for i,name in enumerate(labels):
+    CATEGORIES[name] = {i}
+        
 # Simple point cloud coloring mapping for part segmentation
 def read_pointnet_colors(seg_labels):
     map_label_to_rgb = {
@@ -64,8 +76,8 @@ def read_pointnet_colors(seg_labels):
     return colors
 
 #aqui tem de se alterar para as nossas cenas
-# from torch.utils.data import DataLoader
-# from shapenet_dataset import ShapenetDataset
+from torch.utils.data import DataLoader
+from shapenet_dataset import ShapenetDataset
 
 # # train Dataset & DataLoader
 # train_dataset = ShapenetDataset(ROOT, npoints=NUM_TRAIN_POINTS, split='train', classification=True)
