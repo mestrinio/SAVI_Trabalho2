@@ -3,7 +3,7 @@ import re
 from glob import glob
 import time
 import numpy as np
-import pandas as pd
+# import pandas as pd
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -79,21 +79,21 @@ def read_pointnet_colors(seg_labels):
 from torch.utils.data import DataLoader
 from shapenet_dataset import ShapenetDataset
 
-# # train Dataset & DataLoader
-# train_dataset = ShapenetDataset(ROOT, npoints=NUM_TRAIN_POINTS, split='train', classification=True)
-# train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+# train Dataset & DataLoader
+train_dataset = ShapenetDataset(ROOT, npoints=NUM_TRAIN_POINTS, split='train', classification=True)
+train_dataloader = DataLoader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
 
-# # Validation Dataset & DataLoader
-# valid_dataset = ShapenetDataset(ROOT, npoints=NUM_TRAIN_POINTS, split='valid', classification=True)
-# valid_dataloader = DataLoader(valid_dataset, batch_size=BATCH_SIZE)
+# Validation Dataset & DataLoader
+valid_dataset = ShapenetDataset(ROOT, npoints=NUM_TRAIN_POINTS, split='valid', classification=True)
+valid_dataloader = DataLoader(valid_dataset, batch_size=BATCH_SIZE)
 
-# # test Dataset & DataLoader 
-# test_dataset = ShapenetDataset(ROOT, npoints=NUM_TEST_POINTS, split='test', classification=True)
-# test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
+# test Dataset & DataLoader 
+test_dataset = ShapenetDataset(ROOT, npoints=NUM_TEST_POINTS, split='test', classification=True)
+test_dataloader = DataLoader(test_dataset, batch_size=BATCH_SIZE)
 
-# # test Dataset  (segmentation version for display)
-# test_sample_dataset = ShapenetDataset(ROOT, npoints=NUM_TEST_POINTS, split='test', 
-#                                       classification=False, normalize=False)
+# test Dataset  (segmentation version for display)
+test_sample_dataset = ShapenetDataset(ROOT, npoints=NUM_TEST_POINTS, split='test', 
+                                      classification=False, normalize=False)
 
 sample_dataset = ShapenetDataset(ROOT, npoints=20000, split='train', 
                                  classification=False, normalize=False)
@@ -120,7 +120,7 @@ plt.xticks(list(CATEGORIES.keys()), list(CATEGORIES.keys()), size=12, rotation=9
 plt.ylabel('Counts', size=12)
 plt.title('Train Class Frequencies', size=14, pad=20);
 
-from test_point_net import PointNetClassHead
+from teste_point_net import PointNetClassHead
 
 points, targets = next(iter(train_dataloader))
 
@@ -145,9 +145,9 @@ REG_WEIGHT = 0.001
 
 # manually downweight the high frequency classes
 alpha = np.ones(NUM_CLASSES)
-alpha[0] = 0.5  # airplane
-alpha[4] = 0.5  # chair
-alpha[-1] = 0.5 # table
+# alpha[0] = 0.5  # airplane
+# alpha[4] = 0.5  # chair
+# alpha[-1] = 0.5 # table
 
 gamma = 2
 
@@ -268,7 +268,7 @@ for epoch in range(1, EPOCHS):
     # save model if necessary
     if valid_metrics[-1][-1] >= best_mcc:
         best_mcc = valid_metrics[-1][-1]
-        torch.save(classifier.state_dict(), 'trained_models/cls_focal_clr_2/cls_model_%d.pth' % epoch)
+        torch.save(classifier.state_dict(), 'models/checkpoint_3D_%d.pth' % epoch)
 
 metric_names = ['loss', 'accuracy', 'mcc']
 _, ax = plt.subplots(len(metric_names), 1, figsize=(8, 6))
@@ -283,7 +283,7 @@ plt.subplots_adjust(wspace=0., hspace=0.35)
 plt.show()
 
 #performance do modelo
-MODEL_PATH = 'trained_models/cls_focal_clr/cls_model_35.pth'
+MODEL_PATH = 'models/checkpoint_3D_35.pth'
 
 classifier = PointNetClassHead(num_points=NUM_TEST_POINTS, num_global_feats=GLOBAL_FEATS, k=NUM_CLASSES).to(DEVICE)
 classifier.load_state_dict(torch.load(MODEL_PATH))
