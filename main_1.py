@@ -15,7 +15,10 @@ import open3d as o3d
 import numpy as np
 from matplotlib import cm
 from more_itertools import locate
-import call_model
+from open3d.visualization import gui
+from open3d.visualization import rendering
+#import call_model
+from scene_png.objects import getpngfromscene
 
 view = {
     "class_name": "ViewTrajectory",
@@ -270,9 +273,42 @@ def main():
                                       up=view['trajectory'][0]['up'], point_show_normal=False)
     
     
+    
+    
+    #gui.Application.instance.initialize()
+    #window = gui.Application.instance.create_window("Results", 1024, 768)   # 4x3
+    #scene = gui.SceneWidget()
+    #scene.scene = rendering.Open3DScene(window.renderer)
+    #window.add_child(scene)
+    
+    #gui.Application.instance.initialize()
+    #window = gui.Application.instance.create_window("Open3D", 1024, 768)   # 4x3
+    #scene = gui.SceneWidget()
+    #scene.scene = rendering.Open3DScene(window.renderer)
+    #window.add_child(scene)
+    #scene.scene.add_geometry(f'pcd', pcd_downsampled.points, '''rendering.MaterialRecord()''')
+    #scene.scene.add_geometry(f'origin', frame_world, '''rendering.MaterialRecord()''')
+    #scene.setup_camera(60, pcd_downsampled.get_axis_aligned_bounding_box(), [0, 0, 0])
+    #scene.look_at(np.array(view['trajectory'][0]['lookat'], dtype=np.float32),
+    #            np.array(view['trajectory'][0]['front'], dtype=np.float32),
+    #            np.array(view['trajectory'][0]['up'], dtype=np.float32))
+    #gui.Application.instance.run()
+    #
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     good_objects =  []
     show_final = []
     show_final.append(frame_world)
+    
+    props = {}
     
     for idx, object_data in enumerate(pcd_separate_objects):
         
@@ -294,7 +330,7 @@ def main():
 
         #guardar as point clouds 
         if  largura < 0.50 and comprimento < 0.50:
-            filename = f"object_pcd_{idx:03}.pcd"
+            filename = f"data/objects_pcd/rbgd_datasets/separate/object_pcd_{idx:03}.pcd"
             o3d.io.write_point_cloud(filename, object_data) 
         
             if len(object_data.points) > 1500:
@@ -303,8 +339,32 @@ def main():
                                         front=view['trajectory'][0]['front'],
                                         lookat=view['trajectory'][0]['lookat'],
                                         up=view['trajectory'][0]['up'], point_show_normal=False)
-                good_objects.append(object_data)
+                #scene.scene.add_geometry(f'object_{idx}', object_data.points, rendering.MaterialRecord())
+                aabb = object_data.get_axis_aligned_bounding_box()
+                aabb.color = (1, 0, 0)
+                obb = object_data.get_oriented_bounding_box()
+                obb.color = (0, 1, 0)
+                #scene.scene.add_geometry(f'bbox_{idx}', obb, rendering.MaterialRecord())
+                label_position = maxbound + 0.1
+                label_text = 'objeto'
+                #label_text = f"{obj['label'].capitalize()}\nColor: {obj['color_name']}\nHeight: {obj['height']} mm\nWidth: {obj['width']} mm"
+                #scene.add_3d_label(label_position, label_text)
                 
+                
+                props[idx]={'altura':altura,'comprimento':comprimento,'largura':largura,'maxbound':maxbound,'minbound':minbound}
+                
+                good_objects.append(object_data)
+                show_final.append(object_data)
+                show_final.append(aabb)
+                
+                #show_final.append(obb)
+                
+    #scene_bounds = o3d.geometry.AxisAlignedBoundingBox([-0.5, -0.5, -0.5], [0.5, 0.5, 0.5])
+    #scene.setup_camera(60, scene_bounds, [0, 0, 0])
+    #gui.Application.instance.run()
+    
+    
+    getpngfromscene(scene_path='rgbd-scenes-v2/pcdscenes/01.pcd',crops = props)
     show_final.extend(good_objects)
     
     o3d.visualization.draw_geometries(show_final,
@@ -312,6 +372,43 @@ def main():
                                         front=view['trajectory'][0]['front'],
                                         lookat=view['trajectory'][0]['lookat'],
                                         up=view['trajectory'][0]['up'], point_show_normal=False)
+    
+    # Initialize window
+    #gui.Application.instance.initialize()
+    #window = gui.Application.instance.create_window("Results", 1024, 768)   # 4x3
+    #scene = gui.SceneWidget()
+    #scene.scene = rendering.Open3DScene(window.renderer)
+    #window.add_child(scene)
+#
+    #for i, obj in enumerate(objects):
+#
+    #    # Add point cloud
+    #    point_cloud = obj['points']
+    #    scene.scene.add_geometry(f'object_{i}', point_cloud, rendering.MaterialRecord())
+#
+    #    # Add bbox
+    #    bbox = point_cloud.get_minimal_oriented_bounding_box()
+    #    bbox.color = [0, 0, 0]  # colors from obj['color'] are too bright
+    #    scene.scene.add_geometry(f'bbox_{i}', bbox, rendering.MaterialRecord())
+#
+    #    # Add label
+    #    label_pos = bbox.get_center()
+    #    label_pos[2] += 0.15
+    #    label_text = f"{obj['label'].capitalize()}\nColor: {obj['color_name']}\nHeight: {obj['height']} mm\nWidth: {obj['width']} mm"
+    #    scene.add_3d_label(label_pos, label_text)
+#
+    ## Run
+    #scene_bounds = o3d.geometry.AxisAlignedBoundingBox([-0.5, -0.5, -0.5], [0.5, 0.5, 0.5])
+    #scene.setup_camera(60, scene_bounds, [0, 0, 0])
+    #gui.Application.instance.run()
+    
+    #o3d.visualization.draw_geometries(show_final,
+    #                                    zoom=0.3412,
+    #                                    front=view['trajectory'][0]['front'],
+    #                                    lookat=view['trajectory'][0]['lookat'],
+    #                                    up=view['trajectory'][0]['up'], point_show_normal=False)
+    
+
     
     #entities = []
     #entities.append(frame_world)
