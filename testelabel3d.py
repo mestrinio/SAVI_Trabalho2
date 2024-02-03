@@ -29,17 +29,12 @@ def make_point_cloud(npts, center, radius):
 def high_level():
 
     app = gui.Application.instance
-
     app.initialize()
-
 
     points = make_point_cloud(100, (0, 0, 0), 1.0)
 
-
-    vis = o3d.visualization.O3DVisualizer("Open3D - 3D Text", 1024, 768)
-
+    vis = o3d.visualization.O3DVisualizer("Open3D - 3D booti Text", 1024, 768)
     vis.show_settings = True
-
     vis.add_geometry("Points", points)
 
     for idx in range(0, len(points.points)):
@@ -48,9 +43,7 @@ def high_level():
 
     vis.reset_camera_to_default()
 
-
     app.add_window(vis)
-
     app.run()
 
 
@@ -58,23 +51,17 @@ def high_level():
 def low_level():
 
     app = gui.Application.instance
-
     app.initialize()
 
-
     points = make_point_cloud(100, (0, 0, 0), 1.0)
-
 
     w = app.create_window("Open3D - 3D Text", 1024, 768)
 
     widget3d = gui.SceneWidget()
-
     widget3d.scene = rendering.Open3DScene(w.renderer)
 
     mat = rendering.MaterialRecord()
-
     mat.shader = "defaultUnlit"
-
     mat.point_size = 5 * w.scaling
 
     widget3d.scene.add_geometry("Points", points, mat)
