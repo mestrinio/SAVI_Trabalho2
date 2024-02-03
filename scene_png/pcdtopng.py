@@ -3,8 +3,8 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 # Load PCD file
-paths =['object_pcd_000.pcd','object_pcd_001.pcd','object_pcd_002.pcd','object_pcd_003.pcd','object_pcd_003.pcd',
-        'object_pcd_004.pcd','object_pcd_005.pcd','object_pcd_006.pcd','object_pcd_007.pcd','object_pcd_008.pcd']
+paths =['objects_pcd/objects_to_png/object_pcd_000.pcd','objects_pcd/objects_to_png/object_pcd_001.pcd','objects_pcd/objects_to_png/object_pcd_002.pcd',
+        'objects_pcd/objects_to_png/object_pcd_004.pcd','objects_pcd/objects_to_png/object_pcd_005.pcd']
 for path in (paths):
     pcd = o3d.io.read_point_cloud(path)
 
