@@ -10,6 +10,7 @@ import re
 
 
 pattern = '([a-z_]+)(?=_\d)'
+pattern1 =  '([0-9]+)(?=.p)'
 
 class Dataset(torch.utils.data.Dataset):
 
@@ -19,38 +20,51 @@ class Dataset(torch.utils.data.Dataset):
 
         # Compute the corresponding labels
         # self.labels should be like ['cat', 'dog', 'cat'], but we will use [1, 0, 1] because of pytorch
-        # self.labels = []
-        # for filename in self.filenames:
-        #     basename = os.path.basename(filename)
-        #     blocks = basename.split('.')
-        #     label = blocks[0]  # because basename is "cat.2109.jpg"
+        if self.number_of_images < 10:
+            self.labels = []
+            for filename in self.filenames:
+                # basename = os.path.basename(filename)
+                # blocks = basename.split('.')
+                # label = blocks[0]  # because basename is "cat.2109.jpg"
+                match = re.search(pattern, filename)
+                label = match.group(1)
 
-        #     if label == 'dog':
-        #         self.labels.append(0)
-        #     elif label == 'cat':
-        #         self.labels.append(1)
-        #     else:
-        #         raise ValueError('Unknown label ' + label)
-        self.name = []
-        
-        for filename in self.filenames:
-            match = re.search(pattern, filename)
-            label = match.group(1)
-            if all(item != label for item in self.name):
-                self.name.append(label)
-        self.name.sort()
-        print(self.name)
-            # else:
-            #     self.name[label]=[filename]
+
+                if label == 'bowl':
+                    self.labels.append(5)
+                elif label == 'cap':
+                    self.labels.append(8)
+                elif label == 'cereal':
+                    self.labels.append(10)
+                elif label == 'coffee':
+                    self.labels.append(11)
+                elif label == 'soda':
+                    self.labels.append(44)
+                else:
+                    raise ValueError('Unknown label ' + label)
+        else:    
+            self.name = []
+            
+            for filename in self.filenames:
+                match = re.search(pattern, filename)
+                label = match.group(1)
+                if all(item != label for item in self.name):
+                    self.name.append(label)
+            self.name.sort()
+            print(self.name)
+                # else:
+                #     self.name[label]=[filename]
             
                 
 
         # files=files_+files_1
         # print(files)
-        # for label_ in self.name:
-        #     print(label_)
-        #     apple_len= 0
-        # self.labels = self.name[label]
+        self.labels=[]
+        for i,label_ in enumerate(self.name):
+            print(label_)
+            apple_len= 0
+            
+            self.labels.append(i)
         # self.labels = switch(self.name,len(self.name[label[1]]))
         # print (self.labels)
         # self.labels = switch(self.filenames)
@@ -91,7 +105,7 @@ class Dataset(torch.utils.data.Dataset):
             if item == label:
                 label_num  = idx 
                 break
-        # print('label =' + label + ' idx = ' ,label_num)
+        print('label =' + label + ' idx = ' ,label_num)
 
         # label = self.labels[index]
 
