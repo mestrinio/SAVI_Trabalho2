@@ -132,7 +132,7 @@ def main():
     T2[0:3, 3] = [0.8, 1, -0.31]
     print('T2=\n' + str(T2))
 
-    R = pcd_downsampled.get_rotation_matrix_from_xyz((92*math.pi/180, 5*math.pi/180, -1*math.pi/180))
+    R = pcd_downsampled.get_rotation_matrix_from_xyz((92*math.pi/180, 95*math.pi/180, -1*math.pi/180))
     T2[0:3, 0:3] = R
 
     T = np.dot(T1, T2)
@@ -336,7 +336,7 @@ def main():
         
 
         #guardar as point clouds 
-        if  largura < 0.50 and comprimento < 0.50 and altura < 0.30:
+        if  largura < 0.50 and comprimento < 0.50 and altura < 0.50:
             if len(object_data.points) > 1500:
                 filename = f"objects_pcd/objects_to_png/object_pcd_{idx:03}.pcd"
                 o3d.io.write_point_cloud(filename, object_data) 
