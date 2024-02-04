@@ -78,18 +78,22 @@ def Call_Md_2d(inputs):
               if i == True:
                    label_res.append(labels[idx])
 
+     
+    label_gt = {}
     labels_gt_np = labels_gt.cpu().detach().numpy()
     ground_truths = [ [] for i in range(51)]
-    for i, ground_truth in enumerate(ground_truths):
-        for label in labels_gt_np:
-            ground_truth.append(label == i )
+    # for i, ground_truth in enumerate(ground_truths):
+    #     for label in labels_gt_np:
+    #         ground_truth.append(label == i )
+    #     label_gt[0] =  test_dataset['labels']
+          
     
-    label_gt = []
+   
     for idx,x in enumerate(ground_truths):
         #  print(x)
          for i in x:
               if i == True:
-                   label_gt.append(labels[idx])
+                   label_gt[1].append(labels[idx])
 
 
     
