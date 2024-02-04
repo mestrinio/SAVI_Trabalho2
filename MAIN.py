@@ -15,6 +15,7 @@ import argparse
 from scene_selection import scene_selection
 
 
+
 #################### VIEW ########################
 view = {
     "class_name": "ViewTrajectory",
@@ -49,7 +50,7 @@ def main():
     args = vars(parser.parse_args()) # creates a dictionary
     print(args)
     scene_path = args['scene_selection']
-    
+
     
     
     '''######################################################################### SCENE'''
@@ -61,6 +62,7 @@ def main():
     initial_scene.append(frame_world)
     initial_scene.append(scene_pcd)
     
+
     # VISUALIZATION
     o3d.visualization.draw_geometries(initial_scene,
                                       zoom=0.3412,
@@ -69,6 +71,16 @@ def main():
                                       up=view['trajectory'][0]['up'], point_show_normal=False)
     
     
+    vis = o3d.visualization.Visualizer()
+    vis.create_window()
+    render_option = vis.get_render_option()
+    render_option.mesh_show_back_face = True
+    vis.add_geometry(scene_pcd)
+    vis.capture_screen_image('cena.jpeg', do_render=False)
+    vis.run()
+    
+    vis.destroy_window()
+
     
     '''############### TRANSFORMATIONS ################'''
     # Create transformation T1 only with rotation
@@ -247,13 +259,11 @@ def main():
                 
                 # SAVE GOOD OBJECTS TO VAR
                 good_objects.append(object_data)
-                
+
                 
                 FINAL_SCENE.append(object_data)
-                #FINAL_SCENE.append(aabb)
+                FINAL_SCENE.append(aabb)
         
-    
-           
                 
     '''#################################################### INITIALIZE WINDOW GUI'''
     app = gui.Application.instance
