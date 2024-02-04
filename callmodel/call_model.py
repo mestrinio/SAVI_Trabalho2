@@ -17,6 +17,17 @@ import main
 
 
 def Call_Md_2d(inputs):
+
+    labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
+               'camera', 'cap', 'cell phone', 'cereal box', 'coffee mug', 'comb', 'dry battery',
+                'flashlight', 'food bag', 'food box', 'food can', 'food cup', 'food jar',
+                'garlic', 'glue stick', 'greens', 'hand towel', 'instant noodles', 'keyboard',
+                'kleenex', 'lemon', 'lightbulb', 'lime', 'marker', 'mushroom', 'notebook',
+                'onion', 'orange', 'peach', 'pear', 'pitcher', 'plate', 'pliers', 'potato',
+                'rubber eraser', 'scissors', 'shampoo', 'soda can', 'sponge', 'stapler', 
+                'tomato', 'toothbrush', 'toothpaste', 'water bottle']
+    
+    
     test_dataset = Dataset(inputs)
 
     batch_size = len(inputs)
@@ -57,14 +68,37 @@ def Call_Md_2d(inputs):
         for i, probabilitie in enumerate(probabilities):
             
             probabilitie.append(x[i] > 0.95 )
+    
+    labels_gt_np = labels_predicted.cpu().detach().numpy()
+
+    label_res = []
+    for idx,x in enumerate(probabilities):
+        #  print(x)
+         for i in x:
+              if i == True:
+                   label_res.append(labels[idx])
+
+    labels_gt_np = labels_gt.cpu().detach().numpy()
+    ground_truths = [ [] for i in range(51)]
+    for i, ground_truth in enumerate(ground_truths):
+        for label in labels_gt_np:
+            ground_truth.append(label == i )
+    
+    label_gt = []
+    for idx,x in enumerate(ground_truths):
+        #  print(x)
+         for i in x:
+              if i == True:
+                   label_gt.append(labels[idx])
+
 
     
-    return labels_predicted,probabilities
+    return label_gt,label_res
 
 with open('callmodel/files_from_scene.json', 'r') as f:
         # Reading from json file
         dataset_filenames = json.load(f)
         test_file = dataset_filenames['test_filenames']
 # for  path in (paths):
-labels,probs = Call_Md_2d(test_file)
-print('labels',labels,'probs',probs)
+label_gt,label = Call_Md_2d(test_file)
+print('labels',label_gt,'probs',label)
