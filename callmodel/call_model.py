@@ -16,7 +16,7 @@ import main
 
 
 
-def Call_Md_2d(inputs):
+def Call_Md_2d(inputs= 'callmodel/files_from_scene.json' ):
 
     labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
                'camera', 'cap', 'cell phone', 'cereal box', 'coffee mug', 'comb', 'dry battery',
@@ -27,10 +27,14 @@ def Call_Md_2d(inputs):
                 'rubber eraser', 'scissors', 'shampoo', 'soda can', 'sponge', 'stapler', 
                 'tomato', 'toothbrush', 'toothpaste', 'water bottle']
     
-    
-    test_dataset = Dataset(inputs)
+    with open(inputs, 'r') as f:
+        # Reading from json file
+        dataset_filenames = json.load(f)
+        test_file = dataset_filenames['test_filenames']
 
-    batch_size = len(inputs)
+    test_dataset = Dataset(test_file)
+
+    batch_size = len(test_file)
     test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
 
         # Just for testing the train_loader
