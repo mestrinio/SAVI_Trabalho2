@@ -9,10 +9,10 @@ from torch.utils.data import DataLoader
 from torchmetrics import Precision, Recall, F1Score
 from torchmetrics.classification import MulticlassPrecision
 import json
-from deeplearning.model import Model
-from deeplearning.dataset_random import Dataset
+from model import Model
+from dataset_random import Dataset
 from torchvision import transforms
-
+import main
 
 
 
@@ -31,10 +31,11 @@ def Call_Md_2d(inputs):
 
 
     # Load the saved state_dict into the model
-    checkpoint = torch.load("models/checkpoint_t3.pkl")
+    checkpoint = torch.load("models/checkpoint_t2.pkl")
     loaded_model.load_state_dict(checkpoint["model_state_dict"])
 
     # Set the model to evaluation mode (important if using BatchNorm or Dropout)
+    loaded_model.to(device)
     loaded_model.eval()
     for batch_idx, (inputs_, labels_gt) in enumerate(test_loader):
 
@@ -60,8 +61,10 @@ def Call_Md_2d(inputs):
     
     return labels_predicted,probabilities
 
-paths = ['objects_pcd/objectspng/output_image_0.png','objects_pcd/objectspng/output_image_1.png','objects_pcd/objectspng/output_image_2.png',
-         'objects_pcd/objectspng/output_image_3.png','objects_pcd/objectspng/output_image_4.png']
+with open('callmodel/files_from_scene.json', 'r') as f:
+        # Reading from json file
+        dataset_filenames = json.load(f)
+        test_file = dataset_filenames['test_filenames']
 # for  path in (paths):
-labels,probs = Call_Md_2d(paths)
-print(labels,probs)
+labels,probs = Call_Md_2d(test_file)
+print('labels',labels,'probs',probs)

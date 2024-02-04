@@ -35,8 +35,9 @@ def main():
         # Reading from json file
         dataset_filenames = json.load(f)
 
-
-    test_filenames = dataset_filenames['test_filenames']
+    test_filenames=dataset_filenames['test_file']
+    # test_filenames = dataset_filenames['test_filenames']
+       
     # test_filenames = test_filenames[0:100]
 
     print('Used ' + str(len(test_filenames)) + ' for testing ')
@@ -75,13 +76,16 @@ def main():
 
     # Transform predicted labels into probabilities
     predicted_probabilities = F.softmax(labels_predicted, dim=1).tolist()
+    # max_pred =max(predicted_probabilities)
+    # print(str(max_pred))
     # print(' predicted' + str(predicted_probabilities))
     probabilities = [ []  for i in range(51)]
     # probabilities_dog = [x[0] for x in predicted_probabilities]
     for x in predicted_probabilities:
+        max_pred = max(x)
         for i, probabilitie in enumerate(probabilities):
-            
-            probabilitie.append(x[i] > 0.95 )
+            # print(probabilitie)
+            probabilitie.append(x[i] > 0.50 )
     
 
     # Make a decision using the largest probability

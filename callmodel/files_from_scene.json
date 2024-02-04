@@ -1,0 +1,9 @@
+{
+  "test_filenames": [
+    "objects_pcd/objectspng/output_image_0.png",
+    "objects_pcd/objectspng/output_image_1.png",
+    "objects_pcd/objectspng/output_image_2.png",
+    "objects_pcd/objectspng/output_image_3.png",
+    "objects_pcd/objectspng/output_image_4.png"
+  ]
+}
