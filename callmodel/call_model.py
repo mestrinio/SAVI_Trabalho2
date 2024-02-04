@@ -12,7 +12,7 @@ import json
 from model import Model
 from dataset_random import Dataset
 from torchvision import transforms
-import main
+import re
 
 
 
@@ -81,18 +81,26 @@ def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
          for i in x:
               if i == True:
                    label_res.append(labels[idx])
-
-     
-    label_gt = {'0':'' ,'1':''}
-    labels_gt_np = labels_gt.cpu().detach().numpy()
-    ground_truths = [ [] for i in range(51)]
-    for i, ground_truth in enumerate(ground_truths):
-        for label in labels_gt_np:
-            ground_truth.append(label == i )
-        label_gt['0'] =  test_dataset['labels']
-        
+    labs= []
+    labs1 =[]
+    lab_s = ['','','','','']
+    patern='([0-9, ])+(?=])'
+    patern1 = '([0-9])+'
+    lab_str = str(labels_gt)
     
-   
+    for i in range(5):
+        match = re.search(patern,lab_str)
+        lab_ = match.group()
+        match_=re.search(patern1,lab_)
+        lab_s[i] = match_.group()
+        lab_1 = lab_.split(',')
+        labs.append(int(lab_1[i]))
+    for i,y in enumerate(labs):
+        labs1.append(labels[y])
+
+    label_gt = {'0':labs1,'1':''}
+    labels_gt_np = labels_gt.cpu().detach().numpy()
+    ground_truths = [ [] for i in range(51)]        
     for idx,x in enumerate(ground_truths):
         #  print(x)
          for i in x:
