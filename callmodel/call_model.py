@@ -16,7 +16,7 @@ import main
 
 
 
-def Call_Md_2d(inputs= 'callmodel/files_from_scene.json' ):
+def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
 
     labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
                'camera', 'cap', 'cell phone', 'cereal box', 'coffee mug', 'comb', 'dry battery',
@@ -83,30 +83,26 @@ def Call_Md_2d(inputs= 'callmodel/files_from_scene.json' ):
                    label_res.append(labels[idx])
 
      
-    label_gt = {}
+    label_gt = {'0':'' ,'1':''}
     labels_gt_np = labels_gt.cpu().detach().numpy()
     ground_truths = [ [] for i in range(51)]
-    # for i, ground_truth in enumerate(ground_truths):
-    #     for label in labels_gt_np:
-    #         ground_truth.append(label == i )
-    #     label_gt[0] =  test_dataset['labels']
-          
+    for i, ground_truth in enumerate(ground_truths):
+        for label in labels_gt_np:
+            ground_truth.append(label == i )
+        label_gt['0'] =  test_dataset['labels']
+        
     
    
     for idx,x in enumerate(ground_truths):
         #  print(x)
          for i in x:
               if i == True:
-                   label_gt[1].append(labels[idx])
+                   label_gt['1'].append(labels[idx])
 
 
     
     return label_gt,label_res
 
-with open('callmodel/files_from_scene.json', 'r') as f:
-        # Reading from json file
-        dataset_filenames = json.load(f)
-        test_file = dataset_filenames['test_filenames']
-# for  path in (paths):
-label_gt,label = Call_Md_2d(test_file)
+
+label_gt,label = Call_Md_2d()
 print('labels',label_gt,'probs',label)
