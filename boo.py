@@ -14,6 +14,7 @@ from open3d.visualization import rendering
 import argparse
 from scene_selection import scene_selection
 from screenshot import screenshot
+from callmodel.call_model import Call_Md_2d
 
 
 #################### VIEW ########################
@@ -37,7 +38,6 @@ view = {
 	"version_minor" : 0
 }
 
-
 def draw_registration_result(source, target, transformation):
     source_temp = deepcopy(source)
     target_temp = deepcopy(target)
@@ -49,7 +49,6 @@ def draw_registration_result(source, target, transformation):
                                       front=view['trajectory'][0]['front'],
                                       lookat=view['trajectory'][0]['lookat'],
                                       up=view['trajectory'][0]['up'], point_show_normal=False)
-    
 
 
 
@@ -77,12 +76,10 @@ def main():
     
 
     
-    
-    ##screenshot()
-    
+    #screenshot()
     
     
-    ############################################### saving view from window
+    
     #vis = o3d.visualization.Visualizer()
     #vis.create_window()
     #render_option = vis.get_render_option()
@@ -223,7 +220,9 @@ def main():
     FINAL_SCENE.append(frame_world)
     
     
+    label_k , label_pred = Call_Md_2d()
     
+    i= 0
     '''######################################################## CYCLE THROUGH RIGHT AND WRONG OBJECTS BUT ONLY COUNT GOOD ONES'''
     for idx, object_data in enumerate(pcd_separate_objects):
         
@@ -256,11 +255,11 @@ def main():
                 o3d.io.write_point_cloud(filename, object_data) 
                 
                 # VISUALIZE ONLY GOOD ONES
-                #o3d.visualization.draw_geometries(object_window,
-                #                        zoom=0.3412,
-                #                        front=view['trajectory'][0]['front'],
-                #                        lookat=view['trajectory'][0]['lookat'],
-                #                        up=view['trajectory'][0]['up'], point_show_normal=False)
+                o3d.visualization.draw_geometries(object_window,
+                                        zoom=0.3412,
+                                        front=view['trajectory'][0]['front'],
+                                        lookat=view['trajectory'][0]['lookat'],
+                                        up=view['trajectory'][0]['up'], point_show_normal=False)
                 
                 aabb = object_data.get_axis_aligned_bounding_box()
                 aabb.color = (1, 0, 0)
@@ -273,44 +272,74 @@ def main():
 
 
                 print(aabbs[idx])
-                props[idx]={'text_pos':maxbound,'altura':altura,'comprimento':comprimento,'largura':largura,'maxbound':maxbound,'minbound':minbound}
+                props[idx]={'text_pos':maxbound,'altura':altura,'comprimento':comprimento,'largura':largura,'maxbound':maxbound,'minbound':minbound,'object_name':label_k['0'][i]}
                 
                 label_text = props [idx]
                 
-                
-                '''################################################################################################            ICP           ##########'''
-                #pcd_dataset = o3d.io.read_point_cloud('data/objects_pcd/rgbd-dataset/bowl/bowl_1/bowl_1_1_1.pcd')
-                pcd_dataset = o3d.io.read_point_cloud('objects_pcd/objects_to_png/object_pcd_005.pcd')
-                pcd_dataset_ds = pcd_dataset.voxel_down_sample(voxel_size=0.005)
-                pcd_dataset_ds.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
-                pcd_dataset_ds.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
 
-                Tinit = np.eye(4, dtype=float)  # null transformation
-                
-                reg_p2p = o3d.pipelines.registration.registration_icp(pcd_dataset_ds, object_data, 0.5, Tinit,
-                                                              o3d.pipelines.registration.TransformationEstimationPointToPoint(),
-                                                              o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000))
-
-                print('object idx ' + str(idx))
-                print('reg_p2p = ' + str(reg_p2p))
-
-                print("Transformation is:")
-                print(reg_p2p.transformation)
-
-                objects_data.append({'transformation': reg_p2p.transformation, 'rmse': reg_p2p.inlier_rmse})
-                #print('Object idx ' + str(min_rmse_idx) + ' is the cereal box')
-                draw_registration_result(object_data, pcd_dataset_ds, np.linalg.inv(reg_p2p.transformation))
-                
-                #reg_p2l = o3d.pipelines.registration.registration_icp(pcd_dataset_ds, object_data, 0.01, Tinit, o3d.pipelines.registration.TransformationEstimationPointToPlane())
-                #draw_registration_result(object_data, pcd_dataset_ds, reg_p2l.transformation)
                 # SAVE GOOD OBJECTS TO VAR
                 good_objects.append(object_data)
 
-                
+                i= i + 1 
+
                 FINAL_SCENE.append(object_data)
                 FINAL_SCENE.append(aabb)
         
-                
+    
+    '''################################################################################### ICP RUNNING FOR ALL GOOD OBJECTS'''
+    
+    # --------------------------------------
+    # ICP for object classification
+    # --------------------------------------
+    #pcd_dataset = o3d.io.read_point_cloud('data/objects_pcd/rgbd-dataset/bowl/bowl_1/bowl_1_1_1.pcd')
+    pcd_dataset = o3d.io.read_point_cloud('objects_pcd/objects_to_png/object_pcd_005.pcd')
+    pcd_dataset_ds = pcd_dataset.voxel_down_sample(voxel_size=0.005)
+    pcd_dataset_ds.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
+    pcd_dataset_ds.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
+    
+    for idx, good_object in enumerate(good_objects):
+        
+        objects_data = []
+
+        Tinit = np.eye(4, dtype=float)  # null transformation
+        reg_p2p = o3d.pipelines.registration.registration_icp(pcd_dataset_ds, good_object, 0.9, Tinit,
+                                                                  o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+                                                                  o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000))
+
+        print('object idx ' + str(idx))
+        print('reg_p2p = ' + str(reg_p2p))
+
+        print("Transformation is:")
+        print(reg_p2p.transformation)
+
+        objects_data.append({'transformation': reg_p2p.transformation, 'rmse': reg_p2p.inlier_rmse})
+        #draw_registration_result(good_object, pcd_dataset_ds, np.linalg.inv(reg_p2p.transformation))
+
+    # Select which of the objects in the table is a cereal box by getting the minimum rmse
+    min_rmse = None
+    min_rmse_idx = None
+
+    for idx, object_data in enumerate(objects_data):
+
+        if min_rmse is None:  # first object, use as minimum
+            min_rmse = object_data['rmse']
+            min_rmse_idx = idx
+
+        if object_data['rmse'] < min_rmse:
+            min_rmse = object_data['rmse']
+            min_rmse_idx = idx
+
+    print('Object idx ' + str(min_rmse_idx) + ' is the')
+    draw_registration_result(pcd_separate_objects[min_rmse_idx], pcd_dataset_ds, np.linalg.inv(objects_data[min_rmse_idx]['transformation']))
+    
+    
+    
+    
+    
+    
+    
+    
+    
     '''#################################################### INITIALIZE WINDOW GUI'''
     app = gui.Application.instance
     app.initialize()
@@ -328,6 +357,7 @@ def main():
     
     
     
+    
     ############################## CYCLE BOUNDING BOXES
     for key,value in aabbs.items():
         widget3d.scene.add_geometry(str(key), value, mat)
@@ -335,7 +365,7 @@ def main():
     ################################### CYCLE PROPERTIES TO WRITE IN BOUNDING BOXES
     for idx,properties in props.items():
 
-        l = widget3d.add_3d_label(properties['text_pos'], "altura:{}\nmaxbound:{}".format(properties['altura'],properties['maxbound']))
+        l = widget3d.add_3d_label(properties['text_pos'], "object name: {}\naltura:{}\nmaxbound:{}".format(properties['object_name'],properties['altura'],properties['maxbound']))
 
         l.color = gui.Color(0,0,0)
 
