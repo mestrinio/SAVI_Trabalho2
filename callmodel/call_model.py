@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import itertools
 import numpy as np
 from torch.utils.data import DataLoader
-from torchmetrics import Precision, Recall, F1Score
-from torchmetrics.classification import MulticlassPrecision
+#from torchmetrics import Precision, Recall, F1Score
+#from torchmetrics.classification import MulticlassPrecision
 import json
 try:
     from model import Model
