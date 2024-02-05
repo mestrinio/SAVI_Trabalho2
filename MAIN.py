@@ -14,6 +14,7 @@ from open3d.visualization import rendering
 import argparse
 from scene_selection import scene_selection
 from screenshot import screenshot
+from callmodel.call_model import Call_Md_2d
 
 
 #################### VIEW ########################
@@ -216,7 +217,9 @@ def main():
     FINAL_SCENE.append(frame_world)
     
     
+    label_k , label_pred = Call_Md_2d()
     
+    i= 0
     '''######################################################## CYCLE THROUGH RIGHT AND WRONG OBJECTS BUT ONLY COUNT GOOD ONES'''
     for idx, object_data in enumerate(pcd_separate_objects):
         
@@ -266,7 +269,7 @@ def main():
 
 
                 print(aabbs[idx])
-                props[idx]={'text_pos':maxbound,'altura':altura,'comprimento':comprimento,'largura':largura,'maxbound':maxbound,'minbound':minbound}
+                props[idx]={'text_pos':maxbound,'altura':altura,'comprimento':comprimento,'largura':largura,'maxbound':maxbound,'minbound':minbound,'object_name':label_k['0'][i]}
                 
                 label_text = props [idx]
                 
@@ -294,7 +297,8 @@ def main():
                 # SAVE GOOD OBJECTS TO VAR
                 good_objects.append(object_data)
 
-                
+                i= i + 1 
+
                 FINAL_SCENE.append(object_data)
                 FINAL_SCENE.append(aabb)
         
@@ -316,6 +320,7 @@ def main():
     
     
     
+    
     ############################## CYCLE BOUNDING BOXES
     for key,value in aabbs.items():
         widget3d.scene.add_geometry(str(key), value, mat)
@@ -323,7 +328,7 @@ def main():
     ################################### CYCLE PROPERTIES TO WRITE IN BOUNDING BOXES
     for idx,properties in props.items():
 
-        l = widget3d.add_3d_label(properties['text_pos'], "altura:{}\nmaxbound:{}".format(properties['altura'],properties['maxbound']))
+        l = widget3d.add_3d_label(properties['text_pos'], "object name: {}\naltura:{}\nmaxbound:{}".format(properties['object_name'],properties['altura'],properties['maxbound']))
 
         l.color = gui.Color(0,0,0)
 

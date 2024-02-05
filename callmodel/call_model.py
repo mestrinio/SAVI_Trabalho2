@@ -9,11 +9,11 @@ from torch.utils.data import DataLoader
 from torchmetrics import Precision, Recall, F1Score
 from torchmetrics.classification import MulticlassPrecision
 import json
-from model import Model
-from dataset_random import Dataset
+from callmodel.model import Model
+from callmodel.dataset_random import Dataset
 from torchvision import transforms
 import re
-from main import main_
+from callmodel.main import main_
 from PIL import Image
 
 
@@ -116,4 +116,4 @@ def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
 
 
 label_gt,label = Call_Md_2d()
-print('labels',label_gt,'probs',label)
+# print('labels',label_gt,'probs',label)
