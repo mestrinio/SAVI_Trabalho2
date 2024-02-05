@@ -14,7 +14,7 @@ from open3d.visualization import rendering
 import argparse
 from scene_selection import scene_selection
 from screenshot import screenshot
-#from callmodel.call_model import Call_Md_2d
+from callmodel.call_model import Call_Md_2d
 
 
 
@@ -232,7 +232,7 @@ def main():
     FINAL_SCENE.append(frame_world)
     
     
-    #label_k , label_pred = Call_Md_2d()
+    label_k , label_pred = Call_Md_2d()
     
     i= 0
     '''######################################################## CYCLE THROUGH RIGHT AND WRONG OBJECTS BUT ONLY COUNT GOOD ONES'''
@@ -284,7 +284,9 @@ def main():
 
 
                 print(aabbs[idx])
-                props[i]={'text_pos':maxbound,'altura':round(altura,2),'comprimento':round(comprimento,2),'largura':round(largura,2),'maxbound':maxbound,'minbound':minbound}
+                centro =np.array([maxbound[0]-(comprimento/2),maxbound[1]-(largura/2),maxbound[2]*2])
+
+                props[i]={'text_pos':centro,'altura':round(altura,2),'comprimento':round(comprimento,2),'largura':round(largura,2),'maxbound':maxbound,'minbound':minbound,'deeplabel':label_pred[i]}
                 
                 #label_text = props [idx]
                 
@@ -401,12 +403,12 @@ def main():
     
     ################################### CYCLE PROPERTIES TO WRITE IN BOUNDING BOXES
     for idx,properties in props.items():
-        if idx == 0 or idx ==3:
-            properties['text_pos'] = properties['maxbound']
-        else:
-            properties['text_pos'] = properties['minbound']
+        # if idx == 0 or idx ==3:
+        #     properties['text_pos'] = properties['maxbound']
+        # else:
+        #     properties['text_pos'] = properties['minbound']
             
-        l = widget3d.add_3d_label(properties['text_pos'], "DeepLabel:{}\nICPLabel:{}\nAltura:{}\nComprimento:{}\nLargura:{}".format('label pred',obj_w_lab[idx],properties['altura'],properties['comprimento'],properties['largura']))
+        l = widget3d.add_3d_label(properties['text_pos'], "DeepLabel:{}\nICPLabel:{}\nAltura:{}\nComprimento:{}\nLargura:{}".format(properties['deeplabel'],obj_w_lab[idx],properties['altura'],properties['comprimento'],properties['largura']))
 
         l.color = gui.Color(1,0,0)
 
@@ -415,7 +417,7 @@ def main():
     
     
     #################################### Final execution of window GUI
-    bbox = widget3d.scene.bounding_box
+    bbox_ = widget3d.scene.bounding_box
     widget3d.setup_camera(60.0, bbox, bbox.get_center())
     w.add_child(widget3d)
     app.run()
@@ -427,7 +429,7 @@ def main():
     #                                    front=view['trajectory'][0]['front'],
     #                                    lookat=view['trajectory'][0]['lookat'],
     #                                    up=view['trajectory'][0]['up'], point_show_normal=False)
-    
+    print('ooooooooooooo')
 if __name__ == "__main__":
     main()
 
