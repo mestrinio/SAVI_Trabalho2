@@ -14,7 +14,19 @@ from open3d.visualization import rendering
 import argparse
 from scene_selection import scene_selection
 from screenshot import screenshot
-from callmodel.call_model import Call_Md_2d
+#from callmodel.call_model import Call_Md_2d
+
+
+
+labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
+               'camera', 'cap', 'cell phone', 'cereal box', 'coffee mug', 'comb', 'dry battery',
+                'flashlight', 'food bag', 'food box', 'food can', 'food cup', 'food jar',
+                'garlic', 'glue stick', 'greens', 'hand towel', 'instant noodles', 'keyboard',
+                'kleenex', 'lemon', 'lightbulb', 'lime', 'marker', 'mushroom', 'notebook',
+                'onion', 'orange', 'peach', 'pear', 'pitcher', 'plate', 'pliers', 'potato',
+                'rubber eraser', 'scissors', 'shampoo', 'soda can', 'sponge', 'stapler', 
+                'tomato', 'toothbrush', 'toothpaste', 'water bottle']
+
 
 
 #################### VIEW ########################
@@ -220,7 +232,7 @@ def main():
     FINAL_SCENE.append(frame_world)
     
     
-    label_k , label_pred = Call_Md_2d()
+    #label_k , label_pred = Call_Md_2d()
     
     i= 0
     '''######################################################## CYCLE THROUGH RIGHT AND WRONG OBJECTS BUT ONLY COUNT GOOD ONES'''
@@ -245,7 +257,7 @@ def main():
         
         
         
-        objects_data = []
+        
         # SELECIONAR POINTCLOUDS DE OBJETOS CORRETAS
         if  largura < 0.50 and comprimento < 0.50:
             if len(object_data.points) > 1500:
@@ -255,14 +267,14 @@ def main():
                 o3d.io.write_point_cloud(filename, object_data) 
                 
                 # VISUALIZE ONLY GOOD ONES
-                o3d.visualization.draw_geometries(object_window,
-                                        zoom=0.3412,
-                                        front=view['trajectory'][0]['front'],
-                                        lookat=view['trajectory'][0]['lookat'],
-                                        up=view['trajectory'][0]['up'], point_show_normal=False)
+                #o3d.visualization.draw_geometries(object_window,
+                #                        zoom=0.3412,
+                #                        front=view['trajectory'][0]['front'],
+                #                        lookat=view['trajectory'][0]['lookat'],
+                #                        up=view['trajectory'][0]['up'], point_show_normal=False)
                 
                 aabb = object_data.get_axis_aligned_bounding_box()
-                aabb.color = (1, 0, 0)
+                aabb.color = (0, 1, 0)
 
                 aabbs[idx] = aabb
                 
@@ -272,9 +284,9 @@ def main():
 
 
                 print(aabbs[idx])
-                props[idx]={'text_pos':maxbound,'altura':altura,'comprimento':comprimento,'largura':largura,'maxbound':maxbound,'minbound':minbound,'object_name':label_k['0'][i]}
+                props[i]={'text_pos':maxbound,'altura':round(altura,2),'comprimento':round(comprimento,2),'largura':round(largura,2),'maxbound':maxbound,'minbound':minbound}
                 
-                label_text = props [idx]
+                #label_text = props [idx]
                 
 
                 # SAVE GOOD OBJECTS TO VAR
@@ -291,51 +303,74 @@ def main():
     # --------------------------------------
     # ICP for object classification
     # --------------------------------------
-    #pcd_dataset = o3d.io.read_point_cloud('data/objects_pcd/rgbd-dataset/bowl/bowl_1/bowl_1_1_1.pcd')
-    pcd_dataset = o3d.io.read_point_cloud('objects_pcd/objects_to_png/object_pcd_005.pcd')
-    pcd_dataset_ds = pcd_dataset.voxel_down_sample(voxel_size=0.005)
-    pcd_dataset_ds.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
-    pcd_dataset_ds.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
     
-    for idx, good_object in enumerate(good_objects):
+    
+    #pcd_dataset = o3d.io.read_point_cloud('data/objects_pcd/rgbd-dataset/bowl/bowl_1/bowl_1_1_1.pcd')
+    #pcd_dataset = o3d.io.read_point_cloud('objects_pcd/objects_to_png/object_pcd_005.pcd')
+    #pcd_dataset_ds = pcd_dataset.voxel_down_sample(voxel_size=0.005)
+    #pcd_dataset_ds.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
+    #pcd_dataset_ds.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
+    
+    objects_data = []
+    rmse_temp = []
+    lab = ['coffee_mug','cap','bowl_0','soda_can','bowl_1']    
+    
+    for idx, _ in enumerate(good_objects):
+        rmse_temp.append([])
+
+    for label in lab:
         
-        objects_data = []
+        pcd_dataset = o3d.io.read_point_cloud('objects_pcd/objects_to_png/'+label+'.pcd')
+        pcd_dataset_ds = pcd_dataset.voxel_down_sample(voxel_size=0.005)
+        pcd_dataset_ds.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
+        pcd_dataset_ds.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
+        
+        for idx, good_object in enumerate(good_objects):
+            
+            Tinit = np.eye(4, dtype=float)  # null transformation
+            reg_p2p = o3d.pipelines.registration.registration_icp(pcd_dataset_ds, good_object, 0.9, Tinit,
+                                                                      o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+                                                                      o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=5000))
 
-        Tinit = np.eye(4, dtype=float)  # null transformation
-        reg_p2p = o3d.pipelines.registration.registration_icp(pcd_dataset_ds, good_object, 0.9, Tinit,
-                                                                  o3d.pipelines.registration.TransformationEstimationPointToPoint(),
-                                                                  o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000))
+            print('object idx ' + str(idx))
+            print('reg_p2p = ' + str(reg_p2p))
 
-        print('object idx ' + str(idx))
-        print('reg_p2p = ' + str(reg_p2p))
+            print("Transformation is:")
+            print(reg_p2p.transformation)
 
-        print("Transformation is:")
-        print(reg_p2p.transformation)
+            rmse_temp[idx].append(reg_p2p.inlier_rmse)
+            objects_data.append({'transformation': reg_p2p.transformation, 'rmse': reg_p2p.inlier_rmse})
+            #draw_registration_result(good_object, pcd_dataset_ds, np.linalg.inv(reg_p2p.transformation))
 
-        objects_data.append({'transformation': reg_p2p.transformation, 'rmse': reg_p2p.inlier_rmse})
-        #draw_registration_result(good_object, pcd_dataset_ds, np.linalg.inv(reg_p2p.transformation))
-
+    
+    
     # Select which of the objects in the table is a cereal box by getting the minimum rmse
     min_rmse = None
     min_rmse_idx = None
+    
+    
+    obj_w_lab = []
+    
+    for i, rmses in enumerate(rmse_temp):
+        
+        lab_idx = rmses.index(min(rmses))
+        obj_w_lab.append(lab[lab_idx])
+        
+    
+       
 
-    for idx, object_data in enumerate(objects_data):
-
-        if min_rmse is None:  # first object, use as minimum
-            min_rmse = object_data['rmse']
-            min_rmse_idx = idx
-
-        if object_data['rmse'] < min_rmse:
-            min_rmse = object_data['rmse']
-            min_rmse_idx = idx
-
-    print('Object idx ' + str(min_rmse_idx) + ' is the')
-    draw_registration_result(pcd_separate_objects[min_rmse_idx], pcd_dataset_ds, np.linalg.inv(objects_data[min_rmse_idx]['transformation']))
-    
-    
-    
-    
-    
+    #for idx, object_data in enumerate(objects_data):
+#
+    #    if min_rmse is None:  # first object, use as minimum
+    #        min_rmse = object_data['rmse']
+    #        min_rmse_idx = idx
+#
+    #    if object_data['rmse'] < min_rmse:
+    #        min_rmse = object_data['rmse']
+    #        min_rmse_idx = idx
+#
+    #print('Object idx ' + str(min_rmse_idx) + ' is the')
+    #draw_registration_result(pcd_separate_objects[min_rmse_idx], pcd_dataset_ds, np.linalg.inv(objects_data[min_rmse_idx]['transformation']))
     
     
     
@@ -344,16 +379,18 @@ def main():
     app = gui.Application.instance
     app.initialize()
 
-    w = app.create_window("Open3D - 3D Text", 1024, 768)
+    w = app.create_window("Open3D - 3D Text", 1800, 1000)
 
     widget3d = gui.SceneWidget()
     widget3d.scene = rendering.Open3DScene(w.renderer)
+    
 
     mat = rendering.MaterialRecord()
     mat.shader = "defaultUnlit"
     mat.point_size = 5 * w.scaling
     
     widget3d.scene.add_geometry("frame", scene_pcd, mat)
+    widget3d.scene.set_background(color = [0,0,0,0])
     
     
     
@@ -364,12 +401,17 @@ def main():
     
     ################################### CYCLE PROPERTIES TO WRITE IN BOUNDING BOXES
     for idx,properties in props.items():
+        if idx == 0 or idx ==3:
+            properties['text_pos'] = properties['maxbound']
+        else:
+            properties['text_pos'] = properties['minbound']
+            
+        l = widget3d.add_3d_label(properties['text_pos'], "DeepLabel:{}\nICPLabel:{}\nAltura:{}\nComprimento:{}\nLargura:{}".format('label pred',obj_w_lab[idx],properties['altura'],properties['comprimento'],properties['largura']))
 
-        l = widget3d.add_3d_label(properties['text_pos'], "object name: {}\naltura:{}\nmaxbound:{}".format(properties['object_name'],properties['altura'],properties['maxbound']))
+        l.color = gui.Color(1,0,0)
 
-        l.color = gui.Color(0,0,0)
-
-        l.scale = 1.5
+        l.scale = 1
+            
     
     
     #################################### Final execution of window GUI
@@ -380,11 +422,11 @@ def main():
     
     
     ############################################ SHOW FINAL SCENE IN NORMAL WINDOW
-    o3d.visualization.draw_geometries(FINAL_SCENE,
-                                        zoom=0.3412,
-                                        front=view['trajectory'][0]['front'],
-                                        lookat=view['trajectory'][0]['lookat'],
-                                        up=view['trajectory'][0]['up'], point_show_normal=False)
+    #o3d.visualization.draw_geometries(FINAL_SCENE,
+    #                                    zoom=0.3412,
+    #                                    front=view['trajectory'][0]['front'],
+    #                                    lookat=view['trajectory'][0]['lookat'],
+    #                                    up=view['trajectory'][0]['up'], point_show_normal=False)
     
 if __name__ == "__main__":
     main()
