@@ -13,6 +13,8 @@ from model import Model
 from dataset_random import Dataset
 from torchvision import transforms
 import re
+from main import main_
+from PIL import Image
 
 
 
@@ -31,11 +33,12 @@ def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
         # Reading from json file
         dataset_filenames = json.load(f)
         test_file = dataset_filenames['test_filenames']
+    
 
     test_dataset = Dataset(test_file)
 
     batch_size = len(test_file)
-    test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = torch.utils.data.DataLoader(dataset=test_dataset, batch_size=batch_size, shuffle=False)
 
         # Just for testing the train_loader
     tensor_to_pil_image = transforms.ToPILImage()

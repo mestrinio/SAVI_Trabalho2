@@ -4,7 +4,7 @@
 import glob
 import json
 from sklearn.model_selection import train_test_split
-from dataset_random import Dataset
+from dataset_class import Dataset
 import torch
 from torchvision import transforms
 import matplotlib.pyplot as plt

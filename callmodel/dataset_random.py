@@ -3,7 +3,7 @@
 
 import os
 import torch
-from torchvision import transforms
+from torchvision import transforms, datasets
 from PIL import Image
 import re
 
@@ -15,6 +15,12 @@ pattern1 =  '([0-9]+)(?=.p)'
 class Dataset(torch.utils.data.Dataset):
 
     def __init__(self, filenames):
+        # self.transforms = transforms.Compose([
+        #     transforms.Resize((224, 224)),
+        #     transforms.ToTensor()
+        # ])
+        
+        # self.filenames = datasets.ImageFolder(filenames,transform=self.transforms)
         self.filenames = filenames
         self.number_of_images = len(self.filenames)
         self.b = 'files invalid'
