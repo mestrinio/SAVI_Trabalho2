@@ -269,7 +269,7 @@ def main():
 
 
                 print(aabbs[idx])
-                props[idx]={'text_pos':maxbound,'altura':altura,'comprimento':comprimento,'largura':largura,'maxbound':maxbound,'minbound':minbound,'object_name':label_k['0'][i]}
+                props[idx]={'text_pos':maxbound,'altura':altura,'comprimento':comprimento,'largura':largura,'maxbound':maxbound,'minbound':minbound,'object_name':label_pred[i]}
                 
                 label_text = props [idx]
                 

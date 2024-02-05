@@ -9,11 +9,18 @@ from torch.utils.data import DataLoader
 from torchmetrics import Precision, Recall, F1Score
 from torchmetrics.classification import MulticlassPrecision
 import json
-from callmodel.model import Model
-from callmodel.dataset_random import Dataset
+try:
+    from model import Model
+    from dataset_random import Dataset
+    from main import main_
+
+except:
+    from callmodel.model import Model
+    from callmodel.dataset_random import Dataset
+    from callmodel.main import main_
 from torchvision import transforms
 import re
-from callmodel.main import main_
+
 from PIL import Image
 
 
@@ -74,16 +81,17 @@ def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
     for x in predicted_probabilities:
         for i, probabilitie in enumerate(probabilities):
             
-            probabilitie.append(x[i] > 0.95 )
+            probabilitie.append(x[i] > 0.5 )
     
     labels_gt_np = labels_predicted.cpu().detach().numpy()
 
     label_res = []
-    for idx,x in enumerate(probabilities):
+    for i in range(batch_size):    
+        for idx,x in enumerate(probabilities):
         #  print(x)
-         for i in x:
-              if i == True:
-                   label_res.append(labels[idx])
+        
+            if x[i] == True:
+                label_res.append(labels[idx])
     labs= []
     labs1 =[]
     lab_s = ['','','','','']
@@ -116,4 +124,4 @@ def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
 
 
 label_gt,label = Call_Md_2d()
-# print('labels',label_gt,'probs',label)
+print('labels',label_gt,'probs',label)
