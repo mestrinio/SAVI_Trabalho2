@@ -13,7 +13,7 @@ from open3d.visualization import rendering
 #from scene_png.objects import getpngfromscene
 import argparse
 from scene_selection import scene_selection
-
+from screenshot import screenshot
 
 
 #################### VIEW ########################
@@ -37,6 +37,17 @@ view = {
     "version_minor": 0
 }
 
+def draw_registration_result(source, target, transformation):
+    source_temp = deepcopy(source)
+    target_temp = deepcopy(target)
+    source_temp.paint_uniform_color([1, 0.706, 0])
+    target_temp.paint_uniform_color([0, 0.651, 0.929])
+    source_temp.transform(transformation)
+    o3d.visualization.draw_geometries([source_temp, target_temp],
+                                      zoom=0.4459,
+                                      front=[0.9288, -0.2951, -0.2242],
+                                      lookat=[1.6784, 2.0612, 1.4451],
+                                      up=[-0.3402, -0.9189, -0.1996])
 
 
 
@@ -69,7 +80,7 @@ def main():
                                       front=view['trajectory'][0]['front'],
                                       lookat=view['trajectory'][0]['lookat'],
                                       up=view['trajectory'][0]['up'], point_show_normal=False)
-    
+    #screenshot()
     
     vis = o3d.visualization.Visualizer()
     vis.create_window()
@@ -226,7 +237,9 @@ def main():
         print('COMP',comprimento)
         print('LARG',largura)
         
-
+        
+        
+        objects_data = []
         # SELECIONAR POINTCLOUDS DE OBJETOS CORRETAS
         if  largura < 0.50 and comprimento < 0.50:
             if len(object_data.points) > 1500:
@@ -257,6 +270,27 @@ def main():
                 
                 label_text = props [idx]
                 
+                pcd_dataset = o3d.io.read_point_cloud('data/objects_pcd/rgbd-dataset/bowl/bowl_1/bowl_1_1_1.pcd')
+                pcd_dataset_ds = pcd_dataset.voxel_down_sample(voxel_size=0.005)
+                pcd_dataset_ds.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
+                pcd_dataset_ds.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
+
+                Tinit = np.eye(4, dtype=float)  # null transformation
+                reg_p2p = o3d.pipelines.registration.registration_icp(pcd_dataset_ds, object_data, 0.9, Tinit,
+                                                              o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+                                                              o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000))
+
+                print('object idx ' + str(idx))
+                print('reg_p2p = ' + str(reg_p2p))
+
+                print("Transformation is:")
+                print(reg_p2p.transformation)
+
+                objects_data.append({'transformation': reg_p2p.transformation, 'rmse': reg_p2p.inlier_rmse})
+                #print('Object idx ' + str(min_rmse_idx) + ' is the cereal box')
+                draw_registration_result(object_data, pcd_dataset_ds,
+                             np.linalg.inv(objects_data[0]['transformation']))
+
                 # SAVE GOOD OBJECTS TO VAR
                 good_objects.append(object_data)
 

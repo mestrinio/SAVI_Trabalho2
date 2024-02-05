@@ -21,23 +21,25 @@ filenames = glob.glob(file_path + '***/**/*.pcd')
 pattern = '([a-z_]+)(?=_\d)'
 
 object_paths = 'objects_pcd/objects_to_icp/'
-
+from time import sleep
 #def separate_objects():
     
     
     
 def main():
     
-    pcd_separate_object = o3d.io.read_point_cloud('/objects_pcd/objects_to_png/object_pcd_000.pcd')
+    pcd_separate_object = o3d.io.read_point_cloud('objects_pcd/objects_to_icp/object_pcd_000.pcd')
     
-                                
     #--------------------------------------
     # ICP for object classification
     # --------------------------------------
-    pcd_dataset = o3d.io.read_point_cloud('/data/bowl_001.pcd')
+    pcd_dataset = o3d.io.read_point_cloud('data/objects_pcd/rgbd-dataset/bowl/bowl_1/bowl_1_1_1.pcd')
     pcd_dataset_ds = pcd_dataset.voxel_down_sample(voxel_size=0.005)
     pcd_dataset_ds.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamHybrid(radius=0.1, max_nn=30))
+    sleep(5)
     pcd_dataset_ds.orient_normals_to_align_with_direction(orientation_reference=np.array([0, 0, 1]))
+    
+    
     Tinit = np.eye(4, dtype=float)  # null transformation
     reg_p2p = o3d.pipelines.registration.registration_icp(pcd_dataset_ds, pcd_separate_object, 0.9, Tinit,
                                                               o3d.pipelines.registration.TransformationEstimationPointToPoint(),
@@ -47,7 +49,7 @@ def main():
     print('reg_p2p = ' + str(reg_p2p))
     print("Transformation is:")
     print(reg_p2p.transformation)
-    pcd_separate_object.append({'transformation': reg_p2p.transformation, 'rmse': reg_p2p.inlier_rmse})
+    pcd_separate_object.extend({'transformation': reg_p2p.transformation, 'rmse': reg_p2p.inlier_rmse})
     rmse = pcd_separate_object['rmse']
     print('RMSEEEEEE',rmse)
     o3d.draw_registration_result(pcd_separate_object, pcd_dataset_ds,
