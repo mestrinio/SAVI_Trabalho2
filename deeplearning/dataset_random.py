@@ -20,10 +20,14 @@ class Dataset(torch.utils.data.Dataset):
         self.b = 'files invalid'
         # Compute the corresponding labels
         # self.labels should be like ['cat', 'dog', 'cat'], but we will use [1, 0, 1] because of pytorch
-        if self.number_of_images < 10:
-            self.labels = []
-            self.b=1
-            for filename in self.filenames:
+        for filename in self.filenames:
+            match_= re.search(pattern1,filename)
+            # label = match_.group(1)
+
+            if  match_ != None:
+                self.labels = []
+                self.b=1
+                # for filename in self.filenames:
                 # basename = os.path.basename(filename)
                 # blocks = basename.split('.')
                 # label = blocks[0]  # because basename is "cat.2109.jpg"
@@ -57,27 +61,27 @@ class Dataset(torch.utils.data.Dataset):
                         self.labels.append(44)
                     else:   
                         raise ValueError('Unknown label ' + label)
-        else:    
-            self.name = []
-            self.b=0
-            for filename in self.filenames:
+            else:    
+                self.name = []
+                self.b=0
+                # for filename in self.filenames:
                 match = re.search(pattern, filename)
                 label = match.group(1)
                 if all(item != label for item in self.name):
                     self.name.append(label)
-            self.name.sort()
-            print(self.name)
-                # else:
-                #     self.name[label]=[filename]
+        self.name.sort()
+        print(self.name)
+                    # else:
+                    #     self.name[label]=[filename]
             
                 
 
         # files=files_+files_1
         # print(files)
-            for i,label_ in enumerate(self.name):
-                print(label_)
-                apple_len= 0
-                self.labels.append(i)
+        for i,label_ in enumerate(self.name):
+            print(label_)
+            apple_len= 0
+            self.labels.append(i)
         # self.labels = switch(self.name,len(self.name[label[1]]))
         # print (self.labels)
         # self.labels = switch(self.filenames)

@@ -128,6 +128,11 @@
     "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/dataset/cell_phone_1_4_73_crop.png",
     "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/dataset/binder_1_2_177_crop.png",
     "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/dataset/comb_1_1_36_crop.png",
+    "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_0.png",
+    "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_1.png",
+    "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_2.png",
+    "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_3.png",
+    "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_4.png",
     "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/dataset/tomato_1_4_95_crop.png",
     "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/dataset/marker_1_4_196_crop.png",
     "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/dataset/mushroom_1_1_9_crop.png",
@@ -34823,9 +34828,10 @@
     "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/dataset/orange_1_4_250_crop.png",
     "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/dataset/toothpaste_1_4_225_crop.png"
   ],
-  "test_file": ["C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_0.png",
+  "test_file": [
+    "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_0.png",
                       "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_1.png",
                       "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_2.png",
                       "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_3.png",
-                      "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_4.png"]
+    "C:/Users/USER/OneDrive/Documentos/GitHub/SAVI_Trabalho2/objects_pcd/objectspng/output_image_4.png"]
 }

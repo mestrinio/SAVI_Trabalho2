@@ -123,5 +123,5 @@ def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
     return label_gt,label_res
 
 
-label_gt,label = Call_Md_2d()
-print('labels',label_gt,'probs',label)
+    # label_gt,label = Call_Md_2d()
+    # print('labels',label_gt,'probs',label)

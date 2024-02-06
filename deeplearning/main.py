@@ -4,7 +4,7 @@
 import glob
 import json
 from sklearn.model_selection import train_test_split
-from dataset_class import Dataset
+from dataset_random import Dataset
 import torch
 from torchvision import transforms
 import matplotlib.pyplot as plt
@@ -86,7 +86,7 @@ def main():
                       validation_loader=validation_loader,
                       learning_rate=learning_rate,
                       num_epochs=num_epochs,
-                      model_path='models/checkpoint_t2.pkl',
+                      model_path='models/checkpoint_t3.pkl',
                       load_model=True)
     trainer.train()
 
@@ -94,4 +94,4 @@ def main():
     
 
 if __name__ == "__main__":
-    main
+    main()
