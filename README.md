@@ -33,7 +33,7 @@
   </a>
 
 <h3 align="center">SAVI - Trabalho Prático 2</h3>
-<h3 align="center">MuG-21 Fishbed</h3>
+<h3 align="center">MuG-21 "Fishbed"</h3>
 
 <h2><b> Repository Owner: Pedro Martins 103800
 <br>Collaborators: Emanuel Ramos 103838 & José Silva 103268 </b></h2>
@@ -125,128 +125,94 @@ The segmentation of objects in the pointclouds is used to discover the zone wher
 #### Using 3D Classifier
 After removing the separate objects from the scene's pointcloud, the script will execute a comparison between the object and every pointcloud object from a 3D dataset, performing the ICP (Iterative Closest Point) algorithm and comparing rmse (error measurement) and confirming if the object belongs in the dataset and if so, which one it is, giving it the corresponding label. 
 
+***
 
 ### Audio description of the scene
 A speech synthesizer is used to verbally describe what objects with what properties are found in the scene.
 
+***
 
 ### Perfomance metrics
-All the algorithms made are classified by using perfomance metrics. For the object detectors, the following perfomance metrics are defined:
+The 2D Classifier model is classified by using perfomance metrics. For the object detectors, the following perfomance metrics are defined:
 - Precision
 - Recall
 - F1 Score
 
+***
 
-### Realtime test
-The program can be ran using a RGB-D camera on the real world, and trying the detection of objects on top of a table.
+### Real(not time) test
+The program can be ran using a RGB-D camera on the real world, and trying the detection of objects on top of a table. It captures and shows the feed from the camera and then, on command, captures an image, saving it as a scene ready to be ran by the main script.
 
+***
 
+<br>
+<br>
+<br>
 
+# MuG-21 "Fishbed"
 
-### MuG-21 Fishbed
-
-The actual painting part of the program should accomplish the following requirements:
-
-#### SETUP
-
-
-#### CONTINUOUS
-
+Let's get started:
 
 <!-- GETTING STARTED -->
 ## Getting Started
 
-This is a Python file, so it should be ran in a dedicated terminal running color_segmenter.py, which is the file that runs the first part of the program, to select the desired values for detections. The second and main part of the program, ar_paint.py, runs the painting part and all it's features, but it has some arguments which will be explained later but can be seen using -h argument.
+This is a Python file, so it should be ran in a dedicated terminal. But first, a setup of the required libraries must be performed.
 
+Example:
 ```
-./color_segmenter.py
-./ar_paint.py -h
+./main.py -s '/home/mestre/Desktop/SAVI/REPO_eu_SAVI/TP2/SAVI_Trabalho2/rgbd-scenes-v2/pcdscenes/01.pcd'
 ```
-
 
 
 ## Setup
-<h3><b>Libraries</b></h3>
+To run the open3D GUI scene visualizer, you need to be running the minimum version of python 3.10 with open3D's version as at least 0.15.0.
+The following libraries require installation:
 
-To run the program, the following libraries should be installed:
-
+Note: 'torch' can be installed using CPU or GPU support.
 ```
 sudo apt install python3 python3-tk
+sudo apt install python3-pygame
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+pip3 install torch torchvision torchaudio
+pip install pyrealsense2
+pip install gTTS
+pip install pygame
 pip install opencv-python
 pip install numpy
 ```
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
 ## Usage
 
 ### How it works
 
-Run color_segmenter.py:
-- Select desired values for color detection using the trackbars;
-- Use the masked image to understand if the values are as desired;
-- Hit 'W' to save the values to the JSON file.
+Run main.py:
+- Check if the first window that appears corresponds to the desired scene.
+- Close the window and let the script run the detections and show the final scene identified with labels, bounding boxes and properties.
 
-<br>
-<br>
-<div align="center">
-<img  src="images/colorsegmenter.png" alt="colorsegmenter" height="">
-</div>
-<div align="center">Choose your detection values then hit 'W' to save them</div>
-<br>
-<br>
 
 ***
 
-Arguments when running ar_paint.py:
-- -h (Calls for help argument, that explains the other arguments used);
-- -usp (Activates the usage of shake protection).
-- -j (Insert the full path to the JSON file created in color_segmenter.py)
+Arguments when running main.py:
+- '-h' for help, to remember the arguments
+- '-s' '/scene.pcd' here goes the path to the pointcloud scene that wants to be analyzed (default scene: 01.pcd)
+- '-cam' 1 if wished to run a scene captured by the RBG-D camera (0 = default).
 
-<br>
-<div align="center">
-<img  src="images/runarpaint.png" alt="runarpaint" height="">
-</div>
-<div align="center">Specify the full JSON file's path after -j and write -usp if you want to activate shake protection</div>
-<br>
-<br>
-<br>
+***
 
-Run ar_paint.py:
-- A rememberal for the hotkeys to use during the program should pop-up;
+### Running
+When running the script, it will first select the scene you've chosen, either one taken from the folder of the given dataset, or a capture from the RGB-D camera.
 
-<br>
-<div align="center">
-<img  src="images/tkinter.png" alt="tkinter" height="300">
-</div>
-<div align="center">Keybindings window pop-up</div>
-<br>
-<br>
+After loading the scene, the program will start separating the objects from the rest of the scene. When all are separated, it will run through the detection models and calculate the corresponding object label that best fits the pointcloud. 
 
-- Drawing in the blank canvas should start happening when detecting the color on the camera;
-- Use the hotkeys to change the brush characteristics, switch to drawing on the webcam capture, draw using the mouse and clean or save the current canvas;
+Visualization:
+- every object will appear labelled with either a right (or wrong) detection or a error label if not detected properly by the 2D model
+- below the objects the corresponding properties of color and dimensions will also show up
+- bounding boxes will bound every object for better visualization of the separations made.
 
-<br>
-<div align="center">
-<img  src="images/drawings.png" alt="drawings" height="300">
-</div>
-<div align="center">Start drawing!</div>
-
-##### Keybindings:
-- 'R' to change brush color to <p style="color: rgb(255,0,0)">RED</p>
-- 'G' to change brush color to <p style="color: rgb(0,255,0)">GREEN</p>
-- 'B' to change brush color to <p style="color: rgb(0,0,255)">BLUE</p>
-- 'P' to change brush color to <p style="color: rgb(0,0,0)">BLACK</p>
-- '+' to increase brush size
-- '-' to decrease brush size
-- 'X' to use rubber
-- 'C' to clear the canvas
-- 'W' to save the current canvas to an image file
-- 'J' to switch between the white canvas and the webcam
-- 'M' start using the mouse to draw
-- 'I' stop using the mouse to draw
-- 'Q' shutdown the program
+### Voice-over
+The whole script will be notifying you via generated audio, letting you know the status of everything, what it is doing and what were the detections that it made, while also saying every object's properties.
 
 ***
 <br>
