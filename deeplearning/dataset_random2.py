@@ -23,54 +23,54 @@ class Dataset(torch.utils.data.Dataset):
         # Compute the corresponding labels
         # self.labels should be like ['cat', 'dog', 'cat'], but we will use [1, 0, 1] because of pytorch
         for filename in self.filenames:
-            match_= re.search(pattern1,filename)
+            # match_= re.search(pattern1,filename)
             # label = match_.group(1)
 
-            if  match_ != None:
+            # if  match_ != None:
                 
-                self.b=1
-                # for filename in self.filenames:
-                # basename = os.path.basename(filename)
-                # blocks = basename.split('.')
-                # label = blocks[0]  # because basename is "cat.2109.jpg"
-                match = re.search(pattern, filename)
-                label = match.group(1)
+            #     self.b=1
+            #     # for filename in self.filenames:
+            #     # basename = os.path.basename(filename)
+            #     # blocks = basename.split('.')
+            #     # label = blocks[0]  # because basename is "cat.2109.jpg"
+            #     match = re.search(pattern, filename)
+            #     label = match.group(1)
 
 
-                if label == 'bowl':
-                    self.labels.append(5)
-                elif label == 'cap':
-                    self.labels.append(8)
-                elif label == 'cereal':
-                    self.labels.append(10)
-                elif label == 'coffee':
-                    self.labels.append(11)
-                elif label == 'soda':
-                    self.labels.append(44)
-                else:
-                    match = re.search(pattern1, filename)
-                    label = match.group(1)
-                    a = '2','4'
-                    if label == '2' or label == '4' :
-                        self.labels.append(5)
-                    elif label == '1':
-                        self.labels.append(8)
-                    elif label == '':
-                        self.labels.append(10)
-                    elif label == '0':
-                        self.labels.append(11)
-                    elif label == '3':
-                        self.labels.append(44)
-                    else:   
-                        raise ValueError('Unknown label ' + label)
-            else:    
+            #     if label == 'bowl':
+            #         self.labels.append(5)
+            #     elif label == 'cap':
+            #         self.labels.append(8)
+            #     elif label == 'cereal':
+            #         self.labels.append(10)
+            #     elif label == 'coffee':
+            #         self.labels.append(11)
+            #     elif label == 'soda':
+            #         self.labels.append(44)
+            #     else:
+            #         match = re.search(pattern1, filename)
+            #         label = match.group(1)
+            #         a = '2','4'
+            #         if label == '2' or label == '4' :
+            #             self.labels.append(5)
+            #         elif label == '1':
+            #             self.labels.append(8)
+            #         elif label == '':
+            #             self.labels.append(10)
+            #         elif label == '0':
+            #             self.labels.append(11)
+            #         elif label == '3':
+            #             self.labels.append(44)
+            #         else:   
+            #             raise ValueError('Unknown label ' + label)
+            # else:    
                 
-                self.b=0
-                # for filename in self.filenames:
-                match = re.search(pattern, filename)
-                label = match.group(1)
-                if all(item != label for item in self.name):
-                    self.name.append(label)
+            self.b=0
+            # for filename in self.filenames:
+            match = re.search(pattern, filename)
+            label = match.group(1)
+            if all(item != label for item in self.name):
+                self.name.append(label)
         self.name.sort()
         print(self.name)
                     # else:
@@ -125,7 +125,7 @@ class Dataset(torch.utils.data.Dataset):
                 if item == label:
                     label_num  = idx 
                     break
-            print('label =' + label + ' idx = ' ,label_num)
+            # print('label =' + label + ' idx = ' ,label_num)
 
         elif self.b == 1:
             label_num = self.labels[index]
