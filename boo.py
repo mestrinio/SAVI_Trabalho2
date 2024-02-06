@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import pyrealsense2 as rs
 from copy import deepcopy
 import math
 import os
@@ -15,6 +16,7 @@ import argparse
 from scene_selection import scene_selection
 from screenshot import screenshot
 from callmodel.call_model import Call_Md_2d
+from rgbd_camera import capture_scene_from_camera
 
 
 labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
@@ -65,15 +67,31 @@ def draw_registration_result(source, target, transformation):
 
 def main():
     
-    ########### ARGS ############
+    ########### ARGS PARSER ############
     parser = argparse.ArgumentParser(description='Detection Script.')
     parser.add_argument('-s', '--scene_selection', type=str, help='', required=False, 
                         default='rgbd-scenes-v2/pcdscenes/01.pcd')
+    parser.add_argument('-c', '--camera', type=str, help='', required=False, 
+                        default=0)
+
 
     args = vars(parser.parse_args()) # creates a dictionary
     print(args)
     scene_path = args['scene_selection']
-
+    cam=args['camera']
+    
+    if cam==0:
+        #scene_path = "rgbd-scenes-v2/pcdscenes/01.pcd"  
+        scene_pcd = scene_selection(scene_path)
+    else:
+        try:
+            scene_pcd = capture_scene_from_camera()  
+        except Exception as e:
+            print("Error capturing scene from camera:", e)
+            return
+    
+    
+    
     
     ############################################### SCENE'''
     scene_pcd = scene_selection(scene_path)
@@ -438,7 +456,13 @@ def main():
     #                                    front=view['trajectory'][0]['front'],
     #                                    lookat=view['trajectory'][0]['lookat'],
     #                                    up=view['trajectory'][0]['up'], point_show_normal=False)
-    print('ooooooooooooo')
+    
+    #print('aooooooooooooowwwww potência')
+    
+    
+    
+    
+    
 if __name__ == "__main__":
     main()
 
