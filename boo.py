@@ -15,7 +15,7 @@ from open3d.visualization import rendering
 import argparse
 from scene_selection import scene_selection
 from screenshot import screenshot
-from callmodel.call_model import Call_Md_2d
+from callmodel.call_model_2 import Call_Md_2d
 from rgbd_camera import capture_scene_from_camera
 from color_averaging import get_average_color_name
 
@@ -290,7 +290,7 @@ def main():
                 
                 
                 # VISUALIZE ONLY GOOD ONES
-                #o3d.visualization.draw_geometries(object_window,
+                # o3d.visualization.draw_geometries(object_window,
                 #                        zoom=0.3412,
                 #                        front=view['trajectory'][0]['front'],
                 #                        lookat=view['trajectory'][0]['lookat'],
@@ -299,17 +299,18 @@ def main():
                 aabb = object_data.get_axis_aligned_bounding_box()
                 aabb.color = (0, 1, 0)
 
-                aabbs[idx] = aabb
+                aabbs[i] = aabb
                 
                 #vis.add_geometry("bounding boxes",aabb)
                 #label_text = 'objeto'
                 #label_text = f"{object_data['label'].capitalize()}\nColor: {object_data['color_name']}\nHeight: {object_data['height']} mm\nWidth: {object_data['width']} mm"
 
 
-                print(aabbs[idx])
+                print(aabbs[i])
                 centro =np.array([maxbound[0]-(comprimento/2),maxbound[1]-(largura/2),maxbound[2]+0.06])
                 centro2 =np.array([maxbound[0],maxbound[1]-(largura/3),0])
-                props[i]={'text_pos':centro,'altura':round(altura,2),'comprimento':round(comprimento,2),'largura':round(largura,2),'maxbound':maxbound,'minbound':minbound,'deeplabel':label_pred[i],'centro2':centro2, 'color': color}
+                props[i]={'text_pos':centro,'altura':round(altura,2),'comprimento':round(comprimento,2),
+                          'largura':round(largura,2),'maxbound':maxbound,'minbound':minbound,'deeplabel':'','centro2':centro2, 'color': color}
                 
                 #label_text = props [idx]
                 
@@ -321,7 +322,12 @@ def main():
 
                 FINAL_SCENE.append(object_data)
                 FINAL_SCENE.append(aabb)
-        
+    
+   
+    
+
+    
+
     
     '''################################################################################### ICP RUNNING FOR ALL GOOD OBJECTS'''
     
@@ -430,8 +436,9 @@ def main():
         #     properties['text_pos'] = properties['maxbound']
         # else:
         #     properties['text_pos'] = properties['minbound']
+
             
-        l = widget3d.add_3d_label(properties['text_pos'], "DeepLabel:{}\nICPLabel:{}".format(properties['deeplabel'],obj_w_lab[idx]))
+        l = widget3d.add_3d_label(properties['text_pos'], "DeepLabel:{}\nICPLabel:{}".format(label_pred[idx],obj_w_lab[idx]))
 
         l.color = gui.Color(0,0,0.5)
 
