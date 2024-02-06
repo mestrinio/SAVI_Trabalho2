@@ -174,6 +174,7 @@ sudo apt install python3 python3-tk
 sudo apt install python3-pygame
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 pip3 install torch torchvision torchaudio
+pip install webcolors
 pip install pyrealsense2
 pip install gTTS
 pip install pygame

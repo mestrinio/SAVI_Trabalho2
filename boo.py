@@ -18,6 +18,9 @@ from screenshot import screenshot
 from callmodel.call_model_2 import Call_Md_2d
 from rgbd_camera import capture_scene_from_camera
 from color_averaging import get_average_color_name
+from txtts import text_to_speech,txt_speech
+from time import sleep
+import multiprocessing as mp
 
 
 labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
@@ -66,6 +69,10 @@ def draw_registration_result(source, target, transformation):
 
 
 
+
+
+
+
 def main():
     
     ########### ARGS PARSER ############
@@ -84,9 +91,19 @@ def main():
     if cam==0:
         #scene_path = "rgbd-scenes-v2/pcdscenes/01.pcd"  
         scene_pcd = scene_selection(scene_path)
+        text_to_speech('Scene from directory mode has been selected')
+        proc = mp.Process(target=txt_speech)  # instantiating without any argument
+        proc.start()
+        sleep(2)
+        print('Previous saved scene has been selected for detection')
     else:
         try:
-            scene_pcd = capture_scene_from_camera()  
+            scene_pcd = capture_scene_from_camera()
+            print('RGB-D camera mode will now start')
+            text_to_speech('RGB-D mode has been selected')
+            proc = mp.Process(target=txt_speech)  # instantiating without any argument
+            proc.start()
+            sleep(2)
         except Exception as e:
             print("Error capturing scene from camera:", e)
             return
@@ -204,6 +221,8 @@ def main():
     pcd_objects = pcd_cropped.select_by_index(inlier_idxs, invert=True)
     
     
+    
+    
     '''################################################################################ CLUSTERING'''
     labels = pcd_objects.cluster_dbscan(eps=0.02, min_points=50, print_progress=True)
 
@@ -227,6 +246,14 @@ def main():
     
     #pcd_cropped.paint_uniform_color([0.9, 0.0, 0.0])
     #pcd_table.paint_uniform_color([0.0, 0.0, 0.9])
+    
+    
+    text_to_speech('Concluded loading and processing of scene. Displaying initial scene')
+    proc = mp.Process(target=txt_speech)  # instantiating without any argument
+    proc.start()
+    sleep(2)
+    
+    
     
     # VISUALIZATION
     o3d.visualization.draw_geometries(initial_scene,
@@ -329,6 +356,14 @@ def main():
     
 
     
+    
+    text_to_speech('Separate objects obtained, now running the detections')
+    proc = mp.Process(target=txt_speech)  # instantiating without any argument
+    proc.start()
+    sleep(2)
+    
+    
+    
     '''################################################################################### ICP RUNNING FOR ALL GOOD OBJECTS'''
     
     # --------------------------------------
@@ -404,6 +439,11 @@ def main():
     #draw_registration_result(pcd_separate_objects[min_rmse_idx], pcd_dataset_ds, np.linalg.inv(objects_data[min_rmse_idx]['transformation']))
     
     
+    text_to_speech('All the detections were made, displaying results')
+    proc = mp.Process(target=txt_speech)  # instantiating without any argument
+    proc.start()
+    sleep(2)
+    
     
     
     '''#################################################### INITIALIZE WINDOW GUI'''
@@ -424,12 +464,12 @@ def main():
     widget3d.scene.set_background(color = [0,0,0,0])
     
     
-    
-    
     ############################## CYCLE BOUNDING BOXES
     for key,value in aabbs.items():
         widget3d.scene.add_geometry(str(key), value, mat)
     
+    
+    scene_description = {}
     ################################### CYCLE PROPERTIES TO WRITE IN BOUNDING BOXES
     for idx,properties in props.items():
         # if idx == 0 or idx ==3:
@@ -449,7 +489,21 @@ def main():
         l.color = gui.Color(1,1,1)
 
         l.scale = 0.8
-            
+        
+        
+        scene_description[idx] = 'Object{} detected as {} by 2D detection, and as {} by 3D. Height is {}, Length is {}, Width is {}, Color is {}'.format(idx,properties['deeplabel'],obj_w_lab[idx],properties['altura'],properties['comprimento'],properties['largura'],properties['color'])
+    
+    
+    description = ''
+    
+    for key,value in scene_description.items():
+        description = description + value
+        
+    text_to_speech(description)
+    
+    
+    proc = mp.Process(target=txt_speech)  # instantiating without any argument
+    proc.start()
     
     
     #################################### Final execution of window GUI
