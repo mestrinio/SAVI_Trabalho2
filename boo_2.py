@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import pyrealsense2 as rs
 from copy import deepcopy
 import math
 import os
@@ -15,7 +16,7 @@ import argparse
 from scene_selection import scene_selection
 from screenshot import screenshot
 from callmodel.call_model import Call_Md_2d
-
+from rgbd_camera import capture_scene_from_camera
 
 labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
                'camera', 'cap', 'cell phone', 'cereal box', 'coffee mug', 'comb', 'dry battery',
@@ -64,18 +65,33 @@ def draw_registration_result(source, target, transformation):
 
 
 def main():
-    
-    ########### ARGS ############
     parser = argparse.ArgumentParser(description='Detection Script.')
     parser.add_argument('-s', '--scene_selection', type=str, help='', required=False, 
                         default='rgbd-scenes-v2/pcdscenes/01.pcd')
-
+    parser.add_argument('-c', '--camera', type=str, help='', required=False, 
+                        default='0')
     args = vars(parser.parse_args()) # creates a dictionary
     print(args)
     scene_path = args['scene_selection']
+    cam=args['camera']
+    
+    if cam==0:
+        scene_path = "rgbd-scenes-v2/pcdscenes/01.pcd"  
+        scene_pcd = scene_selection(scene_path)
+    else:
+        try:
+            scene_pcd = capture_scene_from_camera()  
+        except Exception as e:
+            print("Error capturing scene from camera:", e)
+            return
 
     
-    ############################################### SCENE'''
+    ########### ARGS ############
+   
+
+    
+    
+    '''######################################################################### SCENE'''
     scene_pcd = scene_selection(scene_path)
     frame_world = o3d.geometry.TriangleMesh().create_coordinate_frame(size=0.5, origin=np.array([0., 0., 0.]))
     
@@ -232,10 +248,9 @@ def main():
     try:
         label_k , label_pred = Call_Md_2d()
     except:
-        label_pred = ['404','404','404','404','404']
-        print('MODEL NOT AVAILABLE, running with error...')
+        label_pred = [0,0,0,0,0,0]
     
-    
+    #label_k , label_pred = Call_Md_2d()
     
     i= 0
     '''######################################################## CYCLE THROUGH RIGHT AND WRONG OBJECTS BUT ONLY COUNT GOOD ONES'''
@@ -287,8 +302,9 @@ def main():
 
 
                 print(aabbs[idx])
-                centro =np.array([maxbound[0]-(comprimento/2),maxbound[1]-(largura/2),maxbound[2]+0.06])
-                centro2 =np.array([maxbound[0],maxbound[1]-(largura/3),0])
+                centro =np.array([maxbound[0]-(comprimento/2),maxbound[1]-(largura/2),maxbound[2]*1.5])
+                centro2 =np.array([maxbound[0],maxbound[1]-(largura/2),0])
+
                 props[i]={'text_pos':centro,'altura':round(altura,2),'comprimento':round(comprimento,2),'largura':round(largura,2),'maxbound':maxbound,'minbound':minbound,'deeplabel':label_pred[i],'centro2':centro2}
                 
                 #label_text = props [idx]
@@ -411,19 +427,19 @@ def main():
         # else:
         #     properties['text_pos'] = properties['minbound']
             
-        l = widget3d.add_3d_label(properties['text_pos'], "DeepLabel:{}\nICPLabel:{}".format(properties['deeplabel'],obj_w_lab[idx]))
+        l = widget3d.add_3d_label(properties['text_pos'], "DeepLabel: {}\nICPLabel: {}".format(properties['deeplabel'],obj_w_lab[idx]))
 
-        l.color = gui.Color(0,0,0.5)
+        l.color = gui.Color(1,0,0)
 
-        l.scale = 1.1
-        
-        l = widget3d.add_3d_label(properties['centro2'], "Altura:{}\nComprimento:{}\nLargura:{}".format(properties['altura'],properties['comprimento'],properties['largura']))
+        l.scale = 1
 
-        l.color = gui.Color(1,1,1)
+        l = widget3d.add_3d_label(properties['centro2'], "Altura: {}\nComprimento: {}\nLargura: {}".format(properties['altura'],
+                                                                                                           properties['comprimento'],
+                                                                                                           properties['largura']))
 
-        l.scale = 0.8
-            
-    
+        l.color = gui.Color(1,0,0)
+
+        l.scale = 0.7
     
     #################################### Final execution of window GUI
     bbox_ = widget3d.scene.bounding_box

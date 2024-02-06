@@ -1,8 +1,8 @@
 import os
 import torch
 import torch.nn.functional as F
-from sklearn.metrics import confusion_matrix
-import matplotlib.pyplot as plt
+#from sklearn.metrics import confusion_matrix
+#import matplotlib.pyplot as plt
 import itertools
 import numpy as np
 from torch.utils.data import DataLoader
