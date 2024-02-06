@@ -1,9 +1,9 @@
 {
   "test_filenames": [
-    "objects_pcd/objectspng/image_n_0.png",
-    "objects_pcd/objectspng/image_n_1.png",
-    "objects_pcd/objectspng/image_n_2.png",
-    "objects_pcd/objectspng/image_n_3.png",
-    "objects_pcd/objectspng/image_n_4.png"
+    "objects_pcd/objectspng/coffee_mug_0.png",
+    "objects_pcd/objectspng/cap_1.png",
+    "objects_pcd/objectspng/bowl_2.png",
+    "objects_pcd/objectspng/soda_can_3.png",
+    "objects_pcd/objectspng/bowl_4.png"
   ]
 }
