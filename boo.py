@@ -14,8 +14,7 @@ from open3d.visualization import rendering
 import argparse
 from scene_selection import scene_selection
 from screenshot import screenshot
-#from callmodel.call_model import Call_Md_2d
-
+from callmodel.call_model import Call_Md_2d
 
 
 labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
@@ -231,8 +230,11 @@ def main():
     FINAL_SCENE = []
     FINAL_SCENE.append(frame_world)
     
+    try:
+        label_k , label_pred = Call_Md_2d()
+    except:
+        label_pred = [0,0,0,0,0,0]
     
-    #label_k , label_pred = Call_Md_2d()
     
     i= 0
     '''######################################################## CYCLE THROUGH RIGHT AND WRONG OBJECTS BUT ONLY COUNT GOOD ONES'''
@@ -287,7 +289,8 @@ def main():
                 centro =np.array([maxbound[0]-(comprimento/2),maxbound[1]-(largura/2),maxbound[2]*1.5])
                 centro2 =np.array([maxbound[0],maxbound[1]-(largura/2),0])
 
-                props[i]={'text_pos':centro,'altura':round(altura,2),'comprimento':round(comprimento,2),'largura':round(largura,2),'maxbound':maxbound,'minbound':minbound,'deeplabel':'objeto','centro2':centro2}
+                
+                props[i]={'text_pos':centro,'altura':round(altura,2),'comprimento':round(comprimento,2),'largura':round(largura,2),'maxbound':maxbound,'minbound':minbound,'deeplabel':label_pred[i],'centro2':centro2}
                 
                 #label_text = props [idx]
                 
