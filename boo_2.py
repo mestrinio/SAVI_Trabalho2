@@ -69,14 +69,14 @@ def main():
     parser.add_argument('-s', '--scene_selection', type=str, help='', required=False, 
                         default='rgbd-scenes-v2/pcdscenes/01.pcd')
     parser.add_argument('-c', '--camera', type=str, help='', required=False, 
-                        default='0')
+                        default=0)
     args = vars(parser.parse_args()) # creates a dictionary
     print(args)
     scene_path = args['scene_selection']
     cam=args['camera']
     
     if cam==0:
-        scene_path = "rgbd-scenes-v2/pcdscenes/01.pcd"  
+        #scene_path = "rgbd-scenes-v2/pcdscenes/01.pcd"  
         scene_pcd = scene_selection(scene_path)
     else:
         try:
@@ -454,7 +454,7 @@ def main():
     #                                    front=view['trajectory'][0]['front'],
     #                                    lookat=view['trajectory'][0]['lookat'],
     #                                    up=view['trajectory'][0]['up'], point_show_normal=False)
-    print('ooooooooooooo')
+    #print('ooooooooooooo')
 if __name__ == "__main__":
     main()
 

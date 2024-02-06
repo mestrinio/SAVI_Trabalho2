@@ -40,12 +40,12 @@ def capture_scene_from_camera():
     )
 
     # Save the point cloud to a PCD file
-    scene_folder = "scenes"  # Replace with your desired folder name
+    scene_folder = "C:/Users/erfer/OneDrive/Documents/GitHub/SAVI_Trabalho2/rgbd-scenes-v2/scenes"  # Replace with your desired folder name
     os.makedirs(scene_folder, exist_ok=True)
     filename = os.path.join(scene_folder, "captured_scene.pcd")
     o3d.io.write_point_cloud(filename, pcd)
 
     return pcd
 
-if __name__ == "__main__":
-    pcd = capture_scene_from_camera()
+# if __name__ == "__main__":
+#     pcd = capture_scene_from_camera()
