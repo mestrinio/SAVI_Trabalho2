@@ -81,7 +81,7 @@
 <img  src="images/drawing1.png" alt="colorsegmenter" height="400">
 </div>
 <br>
-This assignment was developed for Advanced Systems of Industrial Vision. The program is defined as an advanced perception system that processes data incoming from 3D sensors and RGB normal cameras. The objective is to detect objects presented in a scene, as well as estimate it's properties
+This assignment was developed for Advanced Systems of Industrial Vision (course at University of Aveiro as part of Mechanical Engineering Masters). The program is defined as an advanced perception system that processes data incoming from 3D sensors and RGB normal cameras. The objective is to detect objects presented in a scene, as well as estimate some of it's properties.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -107,17 +107,23 @@ This assignment was developed for Advanced Systems of Industrial Vision. The pro
 The program is capable of detecting objects in a chosen scene, and then calculate various properties of the objects.
 The object dataset is fully utilized to develop a deep learning network that is capable of classifying the objects. It is divided in training 80% and testing 20%. After being trained, it is able to calculate precision (global and per class).
 
+***
 
 ### 3D Pre-processing
 The systems processes the pointcloud of a scene and isolates the objects. Then calculates the following properties:
 - Color
+- Length
 - Height
 - Width
-- Other relevant properties...
 
+***
 
 ### Classification of the objects in the scene
+#### Using 2D Classifier
 The segmentation of objects in the pointclouds is used to discover the zone where the object is in the RGB image. From here a sub-image that contains only the object is obtained and given to the previous network for new training.
+
+#### Using 3D Classifier
+After removing the separate objects from the scene's pointcloud, the script will execute a comparison between the object and every pointcloud object from a 3D dataset, performing the ICP (Iterative Closest Point) algorithm and comparing rmse (error measurement) and confirming if the object belongs in the dataset and if so, which one it is, giving it the corresponding label. 
 
 
 ### Audio description of the scene
