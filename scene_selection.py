@@ -14,3 +14,6 @@ def scene_selection(path):
     
     
     return pcd_downsampled
+
+
+

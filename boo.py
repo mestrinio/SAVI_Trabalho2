@@ -17,6 +17,7 @@ from scene_selection import scene_selection
 from screenshot import screenshot
 from callmodel.call_model import Call_Md_2d
 from rgbd_camera import capture_scene_from_camera
+from color_averaging import get_average_color_name
 
 
 labels = ['apple', 'ball', 'banana', 'bell pepper', 'binder', 'bowl', 'calculator',
@@ -275,7 +276,7 @@ def main():
         print('ALTURA',altura)
         print('COMP',comprimento)
         print('LARG',largura)
-        
+        color = get_average_color_name(object_data)
         
         
         
@@ -284,8 +285,9 @@ def main():
             if len(object_data.points) > 1500:
                 
                 # SALVAR CADA PCD
-                filename = f"objects_pcd/objects_to_icp/object_pcd_{idx:03}.pcd"
+                filename = f"objects_pcd/objects_to_icp/object_pcd_{i:03}.pcd"
                 o3d.io.write_point_cloud(filename, object_data) 
+                
                 
                 # VISUALIZE ONLY GOOD ONES
                 #o3d.visualization.draw_geometries(object_window,
@@ -307,7 +309,7 @@ def main():
                 print(aabbs[idx])
                 centro =np.array([maxbound[0]-(comprimento/2),maxbound[1]-(largura/2),maxbound[2]+0.06])
                 centro2 =np.array([maxbound[0],maxbound[1]-(largura/3),0])
-                props[i]={'text_pos':centro,'altura':round(altura,2),'comprimento':round(comprimento,2),'largura':round(largura,2),'maxbound':maxbound,'minbound':minbound,'deeplabel':label_pred[i],'centro2':centro2}
+                props[i]={'text_pos':centro,'altura':round(altura,2),'comprimento':round(comprimento,2),'largura':round(largura,2),'maxbound':maxbound,'minbound':minbound,'deeplabel':label_pred[i],'centro2':centro2, 'color': color}
                 
                 #label_text = props [idx]
                 
@@ -435,7 +437,7 @@ def main():
 
         l.scale = 1.1
         
-        l = widget3d.add_3d_label(properties['centro2'], "Altura:{}\nComprimento:{}\nLargura:{}".format(properties['altura'],properties['comprimento'],properties['largura']))
+        l = widget3d.add_3d_label(properties['centro2'], "Altura:{}\nComprimento:{}\nLargura:{}\nCor:{}".format(properties['altura'],properties['comprimento'],properties['largura'],properties['color']))
 
         l.color = gui.Color(1,1,1)
 
