@@ -504,7 +504,11 @@ def main():
     
     proc = mp.Process(target=txt_speech)  # instantiating without any argument
     proc.start()
-    
+    print('\n')
+    print('\n')
+    print('\n')
+    print('\n')
+    print('\n')
     
     #################################### Final execution of window GUI
     bbox_ = widget3d.scene.bounding_box
@@ -528,12 +532,3 @@ def main():
     
 if __name__ == "__main__":
     main()
-
-
-    
-    
-    
-    
-    
-    
-    

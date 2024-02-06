@@ -17,7 +17,10 @@ def text_to_speech(text, language='en', speed='normal'):
 def txt_speech():
   print('ESTA AQUI O DEBUG')
   playsound('audio.mp3')
-
-
+  print('\n')
+  print('\n')
+  print('\n')
+  print('\n')
+  print('\n')
     
 
