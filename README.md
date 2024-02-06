@@ -29,7 +29,7 @@
 <br />
 
   <a href="https://github.com/mestrinio/SAVI_Trabalho2">
-    <img src="images/logo.png" alt="Logo" width="550" height="350">
+    <img src="images/LogoUA.jpg" alt="Logo" height="150">
   </a>
 
 <h3 align="center">SAVI - Trabalho Prático 2</h3>
@@ -39,6 +39,7 @@
 <br>Collaborators: Emanuel Ramos 103838 & José Silva 103268 </b></h2>
 
   <p align="center">
+  
     This repository was created for evaluation @ Advanced Systems of Industrial Vision "SAVI 23-24 Trabalho prático 2".
     <br />
     <!-- <a href="https://github.com/mestrinio/SAVI_Trabalho2"><strong>Explore the Wiki »</strong></a> -->
@@ -48,7 +49,9 @@
 </div>
 <br>
 
-
+<div align="center">
+<img  src="images/example.png" alt="THOR" height="500">
+</div>
 
 <!-- TABLE OF CONTENTS -->
 <details>
@@ -78,7 +81,7 @@
 <!-- ABOUT THE ASSIGNMENT -->
 ## About the Assignment
 <div align="center">
-<img  src="images/drawing1.png" alt="colorsegmenter" height="400">
+<img  src="images/example1.png" alt="THOR" height="500">
 </div>
 <br>
 This assignment was developed for Advanced Systems of Industrial Vision (course at University of Aveiro as part of Mechanical Engineering Masters). The program is defined as an advanced perception system that processes data incoming from 3D sensors and RGB normal cameras. The objective is to detect objects presented in a scene, as well as estimate some of it's properties.
@@ -174,6 +177,8 @@ sudo apt install python3 python3-tk
 sudo apt install python3-pygame
 pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 pip3 install torch torchvision torchaudio
+pip install torch
+pip install matplotlib
 pip install webcolors
 pip install pyrealsense2
 pip install gTTS

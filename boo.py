@@ -480,7 +480,7 @@ def main():
             
         l = widget3d.add_3d_label(properties['text_pos'], "DeepLabel:{}\nICPLabel:{}".format(label_pred[idx],obj_w_lab[idx]))
 
-        l.color = gui.Color(0,0,0.5)
+        l.color = gui.Color(1,0,0)
 
         l.scale = 1.1
         
