@@ -276,7 +276,7 @@ def main():
     FINAL_SCENE.append(frame_world)
     
     try:
-        label_k , label_pred = Call_Md_2d()
+        label_pred = Call_Md_2d()
     except:
         label_pred = ['404','404','404','404','404']
         print('MODEL NOT AVAILABLE, running with error...')

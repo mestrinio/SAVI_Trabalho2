@@ -35,7 +35,7 @@ def main():
         # Reading from json file
         dataset_filenames = json.load(f)
 
-    test_filenames=dataset_filenames['test_file']
+    test_filenames=dataset_filenames['test_filenames']
     # test_filenames = dataset_filenames['test_filenames']
        
     # test_filenames = test_filenames[0:100]
@@ -57,7 +57,7 @@ def main():
     device = 'cuda:0' if torch.cuda.is_available() else 'cpu'
 
     # Load the trained model
-    checkpoint = torch.load('models/checkpoint_t2.pkl')
+    checkpoint = torch.load('models/checkpoint_t3.pkl')
     model.load_state_dict(checkpoint['model_state_dict'])
 
     model.to(device)
@@ -162,7 +162,7 @@ def main():
     for i,name in enumerate(labels):
       
         # dic_names= {name}
-        classes[i]={"class_index": i+1,
+        classes[i]={"class_index": i,
                         "class_label": name,
                         "metrics": {
                         "precision": 0 ,

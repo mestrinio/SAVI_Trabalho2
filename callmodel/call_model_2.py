@@ -83,8 +83,8 @@ def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
             
             probabilitie.append(x[i] > 0.45 )
     
-    labels_gt_np = labels_predicted.cpu().detach().numpy()
-
+   
+    
     label_res = []
     for i in range(batch_size):    
         for idx,x in enumerate(probabilities):
@@ -109,19 +109,98 @@ def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
     for i,y in enumerate(labs):
         labs1.append(labels[y])
 
-    label_gt = {'0':labs1,'1':''}
-    labels_gt_np = labels_gt.cpu().detach().numpy()
-    ground_truths = [ [] for i in range(51)]        
-    for idx,x in enumerate(ground_truths):
-        #  print(x)
-         for i in x:
-              if i == True:
-                   label_gt['1'].append(labels[idx])
+   
 
 
     
-    return label_gt,label_res
+
+    labels_gt_np = labels_gt.cpu().detach().numpy()
+    ground_truths = [ [] for i in range(51)]
+    for i, ground_truth in enumerate(ground_truths):
+        
+        for label in labels_gt_np:
+            ground_truth.append(label == i )
+
+    # ground_truth_is_dog = [x == 0 for x in labels_gt_np]
+    # print('ground_truth_is_dog=' + str(ground_truth_is_dog))
+
+    # labels_predicted_np = labels_predicted.cpu().detach().numpy()
+    # print('labels_gt_np = ' + str(labels_gt_np))
+    # print('labels_predicted_np = ' + str(labels_predicted_np))
+
+    # Count FP, FN, TP, and TN
+    TPs = []
+    FPs = []
+    TNs = []
+    FNs = []
+    precisions = []
+    recalls = []
+    f1_scores = []
+    for ground_truth, probabilitie in zip(ground_truths, probabilities):
+        TP, FP, TN, FN = 0, 0, 0, 0
+        for gt, pred in zip(ground_truth, probabilitie):
+            
+            if gt == 1 and pred == 1:  # True positive
+                TP += 1
+            elif gt == 0 and pred == 1:  # False positive
+                FP += 1
+            elif gt == 1 and pred == 0:  # False negative
+                FN += 1
+            elif gt == 0 and pred == 0:  # True negative
+                TN += 1
+        TPs.append(TP)
+        FPs.append(FP)
+        FNs.append(FN)
+        TNs.append(TN)
+        if (TP + FP) == 0  :
+            precision = 0
+        else:
+            precision = TP / (TP + FP)
+        precisions.append(precision)
+        if (TP + FN) == 0:
+            recall = 0
+        else:  
+            recall = TP / (TP + FN)
+        recalls.append(recall)
+        if precision == 0 and recall == 0 :
+            f1_score = 0
+        else:
+            f1_score = 2 * (precision*recall)/(precision+recall)
+        f1_scores.append(f1_score)
+
+    print('TP = ' + str(TPs))    
+    print('TN = ' + str(TNs))
+    print('FP = ' + str(FPs))
+    print('FN = ' + str(FNs))
+    prec=[]
+    reca=[]
+    f1_s=[]
+
+    # Compute precision and recall
+
+    for f1_ in f1_scores:
+        if f1_ == 0 :
+            pass
+        else:
+            f1_s.append(f1_)
+    for reca_ in recalls:
+        if reca_ == 0 :
+            pass
+        else:
+            reca.append(reca_)
+    for prec_ in precisions:
+        if prec_ == 0 :
+            pass
+        else:
+            prec.append(prec_)
+    for i,(pre,rec,f1_sc) in enumerate(zip(prec,reca,f1_s)):
+        print(' Oject ',labs1[i+1],'\n precision ', pre,'\n recall ', rec , '\n f1_sc ',f1_sc)
+    
+    
+    
+
+    return label_res
 
 
-label_gt,label = Call_Md_2d()
-print('labels',label_gt,'probs',label)
+# label = Call_Md_2d()
+# print('probs',label)

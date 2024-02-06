@@ -51,7 +51,7 @@ class Dataset(torch.utils.data.Dataset):
                     match = re.search(pattern1, filename)
                     label = match.group(1)
                     a = '2','4'
-                    if label == '1' or label == '3' :
+                    if label == '1' or label == '4' :
                         self.labels.append(5)
                     elif label == '2':
                         self.labels.append(8)
@@ -59,7 +59,7 @@ class Dataset(torch.utils.data.Dataset):
                         self.labels.append(10)
                     elif label == '0':
                         self.labels.append(11)
-                    elif label == '4':
+                    elif label == '3':
                         self.labels.append(44)
                     else:   
                         raise ValueError('Unknown label ' + label)
