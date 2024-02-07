@@ -168,10 +168,10 @@ def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
             f1_score = 2 * (precision*recall)/(precision+recall)
         f1_scores.append(f1_score)
 
-    print('TP = ' + str(TPs))    
-    print('TN = ' + str(TNs))
-    print('FP = ' + str(FPs))
-    print('FN = ' + str(FNs))
+    # print('TP = ' + str(TPs))    
+    # print('TN = ' + str(TNs))
+    # print('FP = ' + str(FPs))
+    # print('FN = ' + str(FNs))
     prec=[]
     reca=[]
     f1_s=[]
@@ -193,8 +193,8 @@ def Call_Md_2d(inputs = "callmodel/files_from_scene.json" ):
             pass
         else:
             prec.append(prec_)
-    for i,(pre,rec,f1_sc) in enumerate(zip(prec,reca,f1_s)):
-        print(' Oject ',labs1[i+1],'\n precision ', pre,'\n recall ', rec , '\n f1_sc ',f1_sc)
+    # for i,(pre,rec,f1_sc) in enumerate(zip(prec,reca,f1_s)):
+        # print(' Oject ',labs1[i+1],'\n precision ', pre,'\n recall ', rec , '\n f1_sc ',f1_sc)
     
     
     
