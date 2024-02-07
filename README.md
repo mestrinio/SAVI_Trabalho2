@@ -125,6 +125,10 @@ The systems processes the pointcloud of a scene and isolates the objects. Then c
 #### Using 2D Classifier
 The segmentation of objects in the pointclouds is used to discover the zone where the object is in the RGB image. From here a sub-image that contains only the object is obtained and given to the previous network for new training.
 
+<div align="center">
+<img  src="images/graphic.png" alt="THOR" height="500">
+</div>
+
 #### Using 3D Classifier
 After removing the separate objects from the scene's pointcloud, the script will execute a comparison between the object and every pointcloud object from a 3D dataset, performing the ICP (Iterative Closest Point) algorithm and comparing rmse (error measurement) and confirming if the object belongs in the dataset and if so, which one it is, giving it the corresponding label. 
 
@@ -141,6 +145,11 @@ The 2D Classifier model is classified by using perfomance metrics. For the objec
 - Recall
 - F1 Score
 
+Classes used on scene 1:
+{'class_index': 5, 'class_label': 'bowl', 'metrics': {'precision': 1.0, 'recall': 1.0, 'f1_score': 1.0, 'TP': 57, 'TN': 3391, 'FP': 0, 'FN': 0}}  
+{'class_index': 8, 'class_label': 'cap', 'metrics': {'precision': 0.9850746268656716, 'recall': 1.0, 'f1_score': 0.9924812030075187, 'TP': 66, 'TN': 3381, 'FP': 1, 'FN': 0}}
+{'class_index': 11, 'class_label': 'coffee_mug', 'metrics': {'precision': 1.0, 'recall': 1.0, 'f1_score': 1.0, 'TP': 47, 'TN': 3401, 'FP': 0, 'FN': 0}}
+{'class_index': 44, 'class_label': 'soda_can', 'metrics': {'precision': 0.9848484848484849, 'recall': 1.0, 'f1_score': 0.9923664122137404, 'TP': 65, 'TN': 3382, 'FP': 1, 'FN': 0}}
 ***
 
 ### Real(not time) test
